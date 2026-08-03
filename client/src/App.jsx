@@ -25,7 +25,7 @@ import AdminUsers from "./pages/AdminUsers/AdminUsers";
 import Location from "./pages/Location/Location";
 import Contact from "./pages/Contact/Contact";
 import NotFound from "./pages/NotFound/NotFound";
-
+import AdminEnquiries from "./pages/AdminEnquiries/AdminEnquiries";
 
 import {
     useAuth
@@ -216,6 +216,14 @@ function App() {
     path="/contact"
     element={
         <Contact />
+    }
+/>
+<Route
+    path="/admin/enquiries"
+    element={
+        <AdminRoute>
+            <AdminEnquiries />
+        </AdminRoute>
     }
 />
                 <Route

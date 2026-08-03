@@ -20,6 +20,7 @@ import {
     ChevronDown,
     LogIn,
     LogOut,
+    Mail,
     Menu,
     PackagePlus,
     ShoppingBag,
@@ -38,6 +39,7 @@ import {
 
 import "./navbar.css";
 
+
 export default function Navbar() {
     const navigate =
         useNavigate();
@@ -54,6 +56,7 @@ export default function Navbar() {
         itemCount
     } = useCart();
 
+
     const [
         menuOpen,
         setMenuOpen
@@ -64,8 +67,10 @@ export default function Navbar() {
         setAccountOpen
     ] = useState(false);
 
+
     const accountRef =
         useRef(null);
+
 
     const isAdmin =
         user &&
@@ -76,90 +81,165 @@ export default function Navbar() {
             user.role
         );
 
+
     const displayName =
         user?.fullName ||
         user?.username ||
         "Account";
 
-    useEffect(() => {
-        const handleOutside =
-            event => {
-                if (
-                    accountRef.current &&
-                    !accountRef.current.contains(
-                        event.target
-                    )
-                ) {
-                    setAccountOpen(false);
-                }
-            };
 
-        document.addEventListener(
-            "mousedown",
-            handleOutside
-        );
+    // =========================
+    // CLOSE ACCOUNT MENU
+    // WHEN CLICKING OUTSIDE
+    // =========================
 
-        return () => {
-            document.removeEventListener(
+    useEffect(
+        () => {
+            const handleOutside =
+                event => {
+                    if (
+                        accountRef.current &&
+                        !accountRef.current.contains(
+                            event.target
+                        )
+                    ) {
+                        setAccountOpen(
+                            false
+                        );
+                    }
+                };
+
+
+            document.addEventListener(
                 "mousedown",
                 handleOutside
             );
-        };
-    }, []);
 
-    useEffect(() => {
-        setMenuOpen(false);
-        setAccountOpen(false);
-    }, [location.pathname]);
 
-    useEffect(() => {
-        const handleResize =
-            () => {
-                if (
-                    window.innerWidth >
-                    900
-                ) {
-                    setMenuOpen(false);
-                }
+            return () => {
+                document.removeEventListener(
+                    "mousedown",
+                    handleOutside
+                );
             };
+        },
+        []
+    );
 
-        window.addEventListener(
-            "resize",
-            handleResize
-        );
 
-        return () => {
-            window.removeEventListener(
+    // =========================
+    // CLOSE MENUS ON ROUTE CHANGE
+    // =========================
+
+    useEffect(
+        () => {
+            setMenuOpen(
+                false
+            );
+
+            setAccountOpen(
+                false
+            );
+        },
+        [
+            location.pathname
+        ]
+    );
+
+
+    // =========================
+    // DESKTOP RESIZE
+    // =========================
+
+    useEffect(
+        () => {
+            const handleResize =
+                () => {
+                    if (
+                        window.innerWidth >
+                        900
+                    ) {
+                        setMenuOpen(
+                            false
+                        );
+                    }
+                };
+
+
+            window.addEventListener(
                 "resize",
                 handleResize
             );
-        };
-    }, []);
 
-    useEffect(() => {
-        document.body.style.overflow =
-            menuOpen
-                ? "hidden"
-                : "";
 
-        return () => {
+            return () => {
+                window.removeEventListener(
+                    "resize",
+                    handleResize
+                );
+            };
+        },
+        []
+    );
+
+
+    // =========================
+    // BODY SCROLL LOCK
+    // =========================
+
+    useEffect(
+        () => {
             document.body.style.overflow =
-                "";
-        };
-    }, [menuOpen]);
+                menuOpen
+                    ? "hidden"
+                    : "";
+
+
+            return () => {
+                document.body.style.overflow =
+                    "";
+            };
+        },
+        [
+            menuOpen
+        ]
+    );
+
+
+    // =========================
+    // NAVIGATE
+    // =========================
 
     const goTo =
         path => {
-            setMenuOpen(false);
-            setAccountOpen(false);
+            setMenuOpen(
+                false
+            );
 
-            navigate(path);
+            setAccountOpen(
+                false
+            );
+
+            navigate(
+                path
+            );
         };
+
+
+    // =========================
+    // ABOUT
+    // =========================
 
     const handleAboutClick =
         () => {
-            setMenuOpen(false);
-            setAccountOpen(false);
+            setMenuOpen(
+                false
+            );
+
+            setAccountOpen(
+                false
+            );
+
 
             const scrollToAbout =
                 () => {
@@ -168,15 +248,18 @@ export default function Navbar() {
                             "about"
                         );
 
+
                     if (section) {
                         section.scrollIntoView({
                             behavior:
                                 "smooth",
+
                             block:
                                 "start"
                         });
                     }
                 };
+
 
             if (
                 location.pathname ===
@@ -187,13 +270,22 @@ export default function Navbar() {
                 return;
             }
 
-            navigate("/");
+
+            navigate(
+                "/"
+            );
+
 
             setTimeout(
                 scrollToAbout,
                 220
             );
         };
+
+
+    // =========================
+    // LOGOUT
+    // =========================
 
     const handleLogout =
         async () => {
@@ -205,12 +297,20 @@ export default function Navbar() {
                     error
                 );
             } finally {
-                setMenuOpen(false);
-                setAccountOpen(false);
+                setMenuOpen(
+                    false
+                );
 
-                navigate("/");
+                setAccountOpen(
+                    false
+                );
+
+                navigate(
+                    "/"
+                );
             }
         };
+
 
     return (
         <>
@@ -230,23 +330,33 @@ export default function Navbar() {
                 }}
             >
                 <div className="navbar-glow navbar-glow-left" />
+
                 <div className="navbar-glow navbar-glow-right" />
+
 
                 <div className="navbar-inner">
 
-                    {/* BRAND */}
+                    {/* =========================
+                        BRAND
+                    ========================= */}
 
                     <Link
                         to="/"
                         className="brand"
                         onClick={() => {
-                            setMenuOpen(false);
-                            setAccountOpen(false);
+                            setMenuOpen(
+                                false
+                            );
+
+                            setAccountOpen(
+                                false
+                            );
                         }}
                     >
                         <div className="brand-mark">
                             <span />
                         </div>
+
 
                         <div className="brand-text">
                             <div className="brand-title">
@@ -266,9 +376,12 @@ export default function Navbar() {
                     </Link>
 
 
-                    {/* DESKTOP NAV */}
+                    {/* =========================
+                        DESKTOP NAVIGATION
+                    ========================= */}
 
                     <nav className="desktop-nav">
+
                         <NavLink
                             to="/"
                             end
@@ -283,6 +396,7 @@ export default function Navbar() {
                             Home
                         </NavLink>
 
+
                         <NavLink
                             to="/products"
                             className={({
@@ -296,6 +410,7 @@ export default function Navbar() {
                             Products
                         </NavLink>
 
+
                         <button
                             type="button"
                             className="nav-link navbar-about-link"
@@ -305,6 +420,7 @@ export default function Navbar() {
                         >
                             About
                         </button>
+
 
                         <NavLink
                             to="/location"
@@ -319,6 +435,7 @@ export default function Navbar() {
                             Location
                         </NavLink>
 
+
                         <NavLink
                             to="/contact"
                             className={({
@@ -331,26 +448,34 @@ export default function Navbar() {
                         >
                             Contact
                         </NavLink>
+
                     </nav>
 
 
-                    {/* RIGHT SIDE */}
+                    {/* =========================
+                        RIGHT SIDE
+                    ========================= */}
 
                     <div className="navbar-actions">
 
-                        {/* CART */}
+                        {/* =========================
+                            CART
+                        ========================= */}
 
                         <button
                             type="button"
                             className="navbar-cart-button"
                             onClick={() =>
-                                goTo("/cart")
+                                goTo(
+                                    "/cart"
+                                )
                             }
                             aria-label="Open cart"
                         >
                             <ShoppingBag
                                 size={19}
                             />
+
 
                             {itemCount >
                                 0 && (
@@ -361,17 +486,22 @@ export default function Navbar() {
                                         : itemCount}
                                 </span>
                             )}
+
                         </button>
 
 
-                        {/* NOT LOGGED IN */}
+                        {/* =========================
+                            NOT LOGGED IN
+                        ========================= */}
 
                         {!user && (
                             <button
                                 type="button"
                                 className="signin-button"
                                 onClick={() =>
-                                    goTo("/login")
+                                    goTo(
+                                        "/login"
+                                    )
                                 }
                             >
                                 <LogIn
@@ -383,12 +513,16 @@ export default function Navbar() {
                         )}
 
 
-                        {/* LOGGED IN */}
+                        {/* =========================
+                            LOGGED IN
+                        ========================= */}
 
                         {user && (
                             <div
                                 className="account-wrapper"
-                                ref={accountRef}
+                                ref={
+                                    accountRef
+                                }
                             >
                                 <button
                                     type="button"
@@ -401,6 +535,7 @@ export default function Navbar() {
                                     }
                                 >
                                     <div className="navbar-avatar">
+
                                         {user.avatar ? (
                                             <img
                                                 src={
@@ -415,11 +550,16 @@ export default function Navbar() {
                                                 size={18}
                                             />
                                         )}
+
                                     </div>
 
+
                                     <span className="account-name">
-                                        {displayName}
+                                        {
+                                            displayName
+                                        }
                                     </span>
+
 
                                     <motion.span
                                         className="account-chevron"
@@ -438,12 +578,16 @@ export default function Navbar() {
                                             size={15}
                                         />
                                     </motion.span>
+
                                 </button>
 
 
-                                {/* ACCOUNT MENU */}
+                                {/* =========================
+                                    ACCOUNT DROPDOWN
+                                ========================= */}
 
                                 <AnimatePresence>
+
                                     {accountOpen && (
                                         <motion.div
                                             className="account-menu"
@@ -469,6 +613,9 @@ export default function Navbar() {
                                                     0.16
                                             }}
                                         >
+
+                                            {/* ACCOUNT */}
+
                                             <button
                                                 type="button"
                                                 onClick={() =>
@@ -483,6 +630,7 @@ export default function Navbar() {
 
                                                 My Account
                                             </button>
+
 
                                             <button
                                                 type="button"
@@ -499,13 +647,20 @@ export default function Navbar() {
                                                 My Orders
                                             </button>
 
+
+                                            {/* =========================
+                                                ADMIN
+                                            ========================= */}
+
                                             {isAdmin && (
                                                 <>
                                                     <div className="account-menu-divider" />
 
+
                                                     <span className="account-menu-title">
                                                         ADMIN
                                                     </span>
+
 
                                                     <button
                                                         type="button"
@@ -522,6 +677,7 @@ export default function Navbar() {
                                                         Admin Panel
                                                     </button>
 
+
                                                     <button
                                                         type="button"
                                                         onClick={() =>
@@ -537,6 +693,7 @@ export default function Navbar() {
                                                         Manage Products
                                                     </button>
 
+
                                                     <button
                                                         type="button"
                                                         onClick={() =>
@@ -551,10 +708,32 @@ export default function Navbar() {
 
                                                         Manage Users
                                                     </button>
+
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            goTo(
+                                                                "/admin/enquiries"
+                                                            )
+                                                        }
+                                                    >
+                                                        <Mail
+                                                            size={18}
+                                                        />
+
+                                                        Enquiries
+                                                    </button>
                                                 </>
                                             )}
 
+
                                             <div className="account-menu-divider" />
+
+
+                                            {/* =========================
+                                                LOGOUT
+                                            ========================= */}
 
                                             <button
                                                 type="button"
@@ -569,20 +748,27 @@ export default function Navbar() {
 
                                                 Logout
                                             </button>
+
                                         </motion.div>
                                     )}
+
                                 </AnimatePresence>
+
                             </div>
                         )}
 
 
-                        {/* MOBILE MENU BUTTON */}
+                        {/* =========================
+                            MOBILE MENU BUTTON
+                        ========================= */}
 
                         <button
                             type="button"
                             className="mobile-menu-button"
                             onClick={() =>
-                                setMenuOpen(true)
+                                setMenuOpen(
+                                    true
+                                )
                             }
                             aria-label="Open navigation"
                         >
@@ -590,14 +776,20 @@ export default function Navbar() {
                                 size={22}
                             />
                         </button>
+
                     </div>
+
                 </div>
+
             </motion.header>
 
 
-            {/* MOBILE DRAWER */}
+            {/* =========================================================
+                MOBILE DRAWER
+            ========================================================= */}
 
             <AnimatePresence>
+
                 {menuOpen && (
                     <>
                         <motion.div
@@ -612,9 +804,12 @@ export default function Navbar() {
                                 opacity: 0
                             }}
                             onClick={() =>
-                                setMenuOpen(false)
+                                setMenuOpen(
+                                    false
+                                )
                             }
                         />
+
 
                         <motion.aside
                             className="mobile-drawer"
@@ -630,12 +825,19 @@ export default function Navbar() {
                             transition={{
                                 type:
                                     "spring",
+
                                 stiffness:
                                     260,
+
                                 damping:
                                     28
                             }}
                         >
+
+                            {/* =========================
+                                MOBILE HEADER
+                            ========================= */}
+
                             <div className="mobile-drawer-header">
 
                                 <Link
@@ -651,6 +853,7 @@ export default function Navbar() {
                                         <span />
                                     </div>
 
+
                                     <div>
                                         <strong>
                                             Shivalik Dragon
@@ -662,19 +865,27 @@ export default function Navbar() {
                                     </div>
                                 </Link>
 
+
                                 <button
                                     type="button"
                                     className="mobile-close-button"
                                     onClick={() =>
-                                        setMenuOpen(false)
+                                        setMenuOpen(
+                                            false
+                                        )
                                     }
                                 >
                                     <X
                                         size={21}
                                     />
                                 </button>
+
                             </div>
 
+
+                            {/* =========================
+                                MOBILE NAVIGATION
+                            ========================= */}
 
                             <nav className="mobile-nav">
 
@@ -697,6 +908,7 @@ export default function Navbar() {
                                     Home
                                 </NavLink>
 
+
                                 <NavLink
                                     to="/products"
                                     className={({
@@ -715,6 +927,7 @@ export default function Navbar() {
                                     Products
                                 </NavLink>
 
+
                                 <button
                                     type="button"
                                     className="mobile-nav-link mobile-about-link"
@@ -724,6 +937,7 @@ export default function Navbar() {
                                 >
                                     About
                                 </button>
+
 
                                 <NavLink
                                     to="/location"
@@ -743,6 +957,7 @@ export default function Navbar() {
                                     Location
                                 </NavLink>
 
+
                                 <NavLink
                                     to="/contact"
                                     className={({
@@ -761,6 +976,7 @@ export default function Navbar() {
                                     Contact
                                 </NavLink>
 
+
                                 <NavLink
                                     to="/cart"
                                     className={({
@@ -778,6 +994,7 @@ export default function Navbar() {
                                 >
                                     Cart
 
+
                                     {itemCount >
                                         0 && (
                                         <span className="mobile-cart-count">
@@ -786,15 +1003,23 @@ export default function Navbar() {
                                             }
                                         </span>
                                     )}
+
                                 </NavLink>
 
+
+                                {/* =========================
+                                    LOGGED IN MOBILE
+                                ========================= */}
 
                                 {user ? (
                                     <>
                                         <div className="mobile-nav-divider" />
 
+
                                         <div className="mobile-user-card">
+
                                             <div className="mobile-user-avatar">
+
                                                 {user.avatar ? (
                                                     <img
                                                         src={
@@ -809,7 +1034,9 @@ export default function Navbar() {
                                                         size={19}
                                                     />
                                                 )}
+
                                             </div>
+
 
                                             <div>
                                                 <strong>
@@ -823,7 +1050,9 @@ export default function Navbar() {
                                                         user.role}
                                                 </span>
                                             </div>
+
                                         </div>
+
 
                                         <NavLink
                                             to="/account"
@@ -836,6 +1065,7 @@ export default function Navbar() {
                                         >
                                             My Account
                                         </NavLink>
+
 
                                         <NavLink
                                             to="/orders"
@@ -850,13 +1080,19 @@ export default function Navbar() {
                                         </NavLink>
 
 
+                                        {/* =========================
+                                            MOBILE ADMIN
+                                        ========================= */}
+
                                         {isAdmin && (
                                             <>
                                                 <div className="mobile-nav-divider" />
 
+
                                                 <span className="mobile-admin-title">
                                                     ADMIN
                                                 </span>
+
 
                                                 <NavLink
                                                     to="/admin"
@@ -870,6 +1106,7 @@ export default function Navbar() {
                                                     Admin Panel
                                                 </NavLink>
 
+
                                                 <NavLink
                                                     to="/admin/products"
                                                     className="mobile-nav-link"
@@ -882,6 +1119,7 @@ export default function Navbar() {
                                                     Manage Products
                                                 </NavLink>
 
+
                                                 <NavLink
                                                     to="/admin/users"
                                                     className="mobile-nav-link"
@@ -893,8 +1131,26 @@ export default function Navbar() {
                                                 >
                                                     Manage Users
                                                 </NavLink>
+
+
+                                                <NavLink
+                                                    to="/admin/enquiries"
+                                                    className="mobile-nav-link"
+                                                    onClick={() =>
+                                                        setMenuOpen(
+                                                            false
+                                                        )
+                                                    }
+                                                >
+                                                    Enquiries
+                                                </NavLink>
                                             </>
                                         )}
+
+
+                                        {/* =========================
+                                            MOBILE LOGOUT
+                                        ========================= */}
 
                                         <button
                                             type="button"
@@ -909,6 +1165,7 @@ export default function Navbar() {
 
                                             Logout
                                         </button>
+
                                     </>
                                 ) : (
                                     <button
@@ -929,9 +1186,11 @@ export default function Navbar() {
                                 )}
 
                             </nav>
+
                         </motion.aside>
                     </>
                 )}
+
             </AnimatePresence>
         </>
     );

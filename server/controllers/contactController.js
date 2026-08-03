@@ -1,25 +1,25 @@
-const nodemailer =
-    require("nodemailer");
+const ContactMessage =
+    require(
+        "../models/contactMessage"
+    );
+
 
 // =========================
-// MAIL TRANSPORTER
+// VALIDATE EMAIL
 // =========================
 
-const transporter =
-    nodemailer.createTransport({
-        service: "gmail",
+const isValidEmail = (
+    email
+) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        email
+    );
+};
 
-        auth: {
-            user:
-                process.env.EMAIL_USER,
-
-            pass:
-                process.env.EMAIL_PASSWORD
-        }
-    });
 
 // =========================
-// SEND CONTACT MESSAGE
+// CREATE CONTACT MESSAGE
+// PUBLIC
 // =========================
 
 exports.sendContactMessage =
@@ -35,6 +35,7 @@ exports.sendContactMessage =
                 reason,
                 message
             } = req.body;
+
 
             if (
                 !fullName ||
@@ -53,191 +54,125 @@ exports.sendContactMessage =
                     });
             }
 
-            const adminEmail =
-                process.env
-                    .ADMIN_NOTIFICATION_EMAIL ||
-                process.env
-                    .EMAIL_USER;
 
-            // =========================
-            // EMAIL TO ADMIN
-            // =========================
+            const cleanName =
+                String(
+                    fullName
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        100
+                    );
 
-            await transporter.sendMail({
-                from:
-                    `"Shivalik Dragon Website" <${process.env.EMAIL_USER}>`,
+            const cleanEmail =
+                String(
+                    email
+                )
+                    .trim()
+                    .toLowerCase()
+                    .slice(
+                        0,
+                        150
+                    );
 
-                to:
-                    adminEmail,
+            const cleanPhone =
+                String(
+                    phone || ""
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        30
+                    );
 
-                replyTo:
-                    email,
+            const cleanReason =
+                String(
+                    reason
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        120
+                    );
 
-                subject:
-                    `New Contact Message - ${reason}`,
+            const cleanMessage =
+                String(
+                    message
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        2500
+                    );
 
-                html: `
-                    <div
-                        style="
-                            font-family: Arial, sans-serif;
-                            max-width: 650px;
-                            margin: auto;
-                            color: #193326;
-                        "
-                    >
-                        <h2>
-                            New Contact Message
-                        </h2>
 
-                        <p>
-                            A visitor submitted
-                            the contact form on
-                            Shivalik Dragon.
-                        </p>
+            if (
+                !cleanName ||
+                !cleanEmail ||
+                !cleanReason ||
+                !cleanMessage
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success:
+                            false,
 
-                        <div
-                            style="
-                                margin-top: 20px;
-                                padding: 18px;
-                                border-radius: 12px;
-                                background: #f4faf6;
-                            "
-                        >
-                            <p>
-                                <strong>Name:</strong>
-                                ${fullName}
-                            </p>
+                        message:
+                            "Please complete all required fields."
+                    });
+            }
 
-                            <p>
-                                <strong>Email:</strong>
-                                ${email}
-                            </p>
 
-                            <p>
-                                <strong>Phone:</strong>
-                                ${phone || "Not provided"}
-                            </p>
+            if (
+                !isValidEmail(
+                    cleanEmail
+                )
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success:
+                            false,
 
-                            <p>
-                                <strong>Reason:</strong>
-                                ${reason}
-                            </p>
+                        message:
+                            "Please enter a valid email address."
+                    });
+            }
 
-                            <p>
-                                <strong>Message:</strong>
-                            </p>
 
-                            <p
-                                style="
-                                    white-space: pre-line;
-                                "
-                            >
-                                ${message}
-                            </p>
-                        </div>
+            const contactMessage =
+                await ContactMessage.create(
+                    {
+                        fullName:
+                            cleanName,
 
-                        <p
-                            style="
-                                margin-top: 20px;
-                                color: #708078;
-                                font-size: 13px;
-                            "
-                        >
-                            You can reply directly
-                            to this email to respond
-                            to ${fullName}.
-                        </p>
-                    </div>
-                `
-            });
+                        email:
+                            cleanEmail,
 
-            // =========================
-            // ACKNOWLEDGEMENT TO USER
-            // =========================
+                        phone:
+                            cleanPhone,
 
-            await transporter.sendMail({
-                from:
-                    `"Shivalik Dragon" <${process.env.EMAIL_USER}>`,
+                        reason:
+                            cleanReason,
 
-                to:
-                    email,
+                        message:
+                            cleanMessage
+                    }
+                );
 
-                subject:
-                    "We received your message - Shivalik Dragon",
-
-                html: `
-                    <div
-                        style="
-                            font-family: Arial, sans-serif;
-                            max-width: 650px;
-                            margin: auto;
-                            color: #193326;
-                        "
-                    >
-                        <h2>
-                            Thanks for contacting
-                            Shivalik Dragon
-                        </h2>
-
-                        <p>
-                            Hi ${fullName},
-                        </p>
-
-                        <p>
-                            We have received your
-                            message regarding
-                            <strong>${reason}</strong>.
-                        </p>
-
-                        <p>
-                            Our team will get back
-                            to you as soon as
-                            possible.
-                        </p>
-
-                        <div
-                            style="
-                                margin-top: 22px;
-                                padding: 16px;
-                                border-radius: 12px;
-                                background: #f4faf6;
-                            "
-                        >
-                            <strong>
-                                Your message
-                            </strong>
-
-                            <p
-                                style="
-                                    white-space: pre-line;
-                                    color: #66756c;
-                                "
-                            >
-                                ${message}
-                            </p>
-                        </div>
-
-                        <p
-                            style="
-                                margin-top: 24px;
-                            "
-                        >
-                            Regards,<br/>
-                            <strong>
-                                Shivalik Dragon
-                            </strong>
-                        </p>
-                    </div>
-                `
-            });
 
             return res
-                .status(200)
+                .status(201)
                 .json({
-                    success: true,
+                    success:
+                        true,
 
                     message:
-                        "Message sent successfully."
+                        "Message sent successfully.",
+
+                    contactMessage
                 });
 
         } catch (error) {
@@ -249,10 +184,505 @@ exports.sendContactMessage =
             return res
                 .status(500)
                 .json({
-                    success: false,
+                    success:
+                        false,
 
                     message:
                         "Unable to send your message right now."
+                });
+        }
+    };
+
+
+// =========================
+// GET ALL CONTACT MESSAGES
+// ADMIN
+// =========================
+
+exports.getContactMessages =
+    async (
+        req,
+        res
+    ) => {
+        try {
+            const {
+                status,
+                search
+            } = req.query;
+
+            const filter = {};
+
+
+            if (
+                status ===
+                "unread"
+            ) {
+                filter.isRead =
+                    false;
+            }
+
+
+            if (
+                status ===
+                "read"
+            ) {
+                filter.isRead =
+                    true;
+            }
+
+
+            if (
+                status ===
+                "resolved"
+            ) {
+                filter.isResolved =
+                    true;
+            }
+
+
+            if (
+                status ===
+                "pending"
+            ) {
+                filter.isResolved =
+                    false;
+            }
+
+
+            if (
+                search &&
+                search.trim()
+            ) {
+                const escapedSearch =
+                    search
+                        .trim()
+                        .replace(
+                            /[.*+?^${}()|[\]\\]/g,
+                            "\\$&"
+                        );
+
+                const regex =
+                    new RegExp(
+                        escapedSearch,
+                        "i"
+                    );
+
+                filter.$or = [
+                    {
+                        fullName:
+                            regex
+                    },
+
+                    {
+                        email:
+                            regex
+                    },
+
+                    {
+                        phone:
+                            regex
+                    },
+
+                    {
+                        reason:
+                            regex
+                    },
+
+                    {
+                        message:
+                            regex
+                    }
+                ];
+            }
+
+
+            const messages =
+                await ContactMessage
+                    .find(
+                        filter
+                    )
+                    .sort({
+                        createdAt:
+                            -1
+                    });
+
+
+            const unreadCount =
+                await ContactMessage
+                    .countDocuments({
+                        isRead:
+                            false
+                    });
+
+
+            const unresolvedCount =
+                await ContactMessage
+                    .countDocuments({
+                        isResolved:
+                            false
+                    });
+
+
+            return res
+                .status(200)
+                .json({
+                    success:
+                        true,
+
+                    count:
+                        messages.length,
+
+                    unreadCount,
+
+                    unresolvedCount,
+
+                    messages
+                });
+
+        } catch (error) {
+            console.error(
+                "Get contact messages error:",
+                error
+            );
+
+            return res
+                .status(500)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "Unable to fetch enquiries."
+                });
+        }
+    };
+
+
+// =========================
+// GET SINGLE MESSAGE
+// ADMIN
+// =========================
+
+exports.getContactMessage =
+    async (
+        req,
+        res
+    ) => {
+        try {
+            const message =
+                await ContactMessage
+                    .findById(
+                        req.params.id
+                    );
+
+
+            if (!message) {
+                return res
+                    .status(404)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Enquiry not found."
+                    });
+            }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:
+                        true,
+
+                    message
+                });
+
+        } catch (error) {
+            console.error(
+                "Get contact message error:",
+                error
+            );
+
+            if (
+                error.name ===
+                "CastError"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Invalid enquiry ID."
+                    });
+            }
+
+
+            return res
+                .status(500)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "Unable to fetch enquiry."
+                });
+        }
+    };
+
+
+// =========================
+// MARK READ / UNREAD
+// ADMIN
+// =========================
+
+exports.updateReadStatus =
+    async (
+        req,
+        res
+    ) => {
+        try {
+            const {
+                isRead
+            } = req.body;
+
+
+            if (
+                typeof isRead !==
+                "boolean"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "isRead must be true or false."
+                    });
+            }
+
+
+            const message =
+                await ContactMessage
+                    .findByIdAndUpdate(
+                        req.params.id,
+
+                        {
+                            isRead
+                        },
+
+                        {
+                            new:
+                                true
+                        }
+                    );
+
+
+            if (!message) {
+                return res
+                    .status(404)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Enquiry not found."
+                    });
+            }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:
+                        true,
+
+                    message:
+                        "Read status updated.",
+
+                    contactMessage:
+                        message
+                });
+
+        } catch (error) {
+            console.error(
+                "Update read status error:",
+                error
+            );
+
+            return res
+                .status(500)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "Unable to update enquiry."
+                });
+        }
+    };
+
+
+// =========================
+// MARK RESOLVED
+// ADMIN
+// =========================
+
+exports.updateResolvedStatus =
+    async (
+        req,
+        res
+    ) => {
+        try {
+            const {
+                isResolved
+            } = req.body;
+
+
+            if (
+                typeof isResolved !==
+                "boolean"
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "isResolved must be true or false."
+                    });
+            }
+
+
+            const message =
+                await ContactMessage
+                    .findByIdAndUpdate(
+                        req.params.id,
+
+                        {
+                            isResolved,
+
+                            ...(isResolved
+                                ? {
+                                      isRead:
+                                          true
+                                  }
+                                : {})
+                        },
+
+                        {
+                            new:
+                                true
+                        }
+                    );
+
+
+            if (!message) {
+                return res
+                    .status(404)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Enquiry not found."
+                    });
+            }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:
+                        true,
+
+                    message:
+                        isResolved
+                            ? "Enquiry resolved."
+                            : "Enquiry reopened.",
+
+                    contactMessage:
+                        message
+                });
+
+        } catch (error) {
+            console.error(
+                "Update resolved status error:",
+                error
+            );
+
+            return res
+                .status(500)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "Unable to update enquiry."
+                });
+        }
+    };
+
+
+// =========================
+// DELETE MESSAGE
+// ADMIN
+// =========================
+
+exports.deleteContactMessage =
+    async (
+        req,
+        res
+    ) => {
+        try {
+            const message =
+                await ContactMessage
+                    .findByIdAndDelete(
+                        req.params.id
+                    );
+
+
+            if (!message) {
+                return res
+                    .status(404)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Enquiry not found."
+                    });
+            }
+
+
+            return res
+                .status(200)
+                .json({
+                    success:
+                        true,
+
+                    message:
+                        "Enquiry deleted successfully."
+                });
+
+        } catch (error) {
+            console.error(
+                "Delete contact message error:",
+                error
+            );
+
+            return res
+                .status(500)
+                .json({
+                    success:
+                        false,
+
+                    message:
+                        "Unable to delete enquiry."
                 });
         }
     };
