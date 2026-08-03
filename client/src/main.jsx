@@ -46,8 +46,14 @@ ReactDOM
                     <AuthProvider>
     <CartProvider>
         <App />
-
-        <Toaster
+     <Toaster
+    position="top-center"
+    gutter={12}
+    containerStyle={{
+        top: "24px"
+    }}
+/>
+        {/* <Toaster
             position="top-right"
             toastOptions={{
                 duration: 3500,
@@ -63,7 +69,7 @@ ReactDOM
                         "#ffffff"
                 }
             }}
-        />
+        /> */}
     </CartProvider>
 </AuthProvider>
                 </BrowserRouter>
