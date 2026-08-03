@@ -1,18 +1,29 @@
-const nodemailer =
-    require("nodemailer");
+const {
+    Resend
+} = require("resend");
 
-const transporter =
-    nodemailer.createTransport({
-        service: "gmail",
 
-        auth: {
-            user:
-                process.env.EMAIL_USER,
+// =========================
+// RESEND CLIENT
+// =========================
 
-            pass:
-                process.env.EMAIL_PASSWORD
-        }
-    });
+const resend =
+    new Resend(
+        process.env.RESEND_API_KEY
+    );
+
+
+// =========================
+// EMAIL CONFIG
+// =========================
+
+const getFromEmail = () => {
+    return (
+        process.env.RESEND_FROM_EMAIL ||
+        "Shivalik Dragon <onboarding@resend.dev>"
+    );
+};
+
 
 // =========================
 // SEND EMAIL
@@ -21,40 +32,81 @@ const transporter =
 const sendEmail = async ({
     to,
     subject,
-    html
+    html,
+    replyTo
 }) => {
+    if (!to) {
+        console.log(
+            "Email skipped: recipient missing."
+        );
+
+        return;
+    }
+
     if (
-        !to ||
-        !process.env.EMAIL_USER ||
-        !process.env.EMAIL_PASSWORD
+        !process.env
+            .RESEND_API_KEY
     ) {
         console.log(
-            "Email skipped: configuration or recipient missing."
+            "Email skipped: RESEND_API_KEY missing."
         );
 
         return;
     }
 
     try {
-        await transporter.sendMail({
-            from: {
-                name:
-                    "Shivalik Dragon",
+        const {
+            data,
+            error
+        } =
+            await resend
+                .emails
+                .send({
+                    from:
+                        getFromEmail(),
 
-                address:
-                    process.env.EMAIL_USER
-            },
+                    to:
+                        Array.isArray(
+                            to
+                        )
+                            ? to
+                            : [to],
 
-            to,
+                    subject,
 
-            subject,
+                    html,
 
-            html
-        });
+                    ...(replyTo
+                        ? {
+                              replyTo:
+                                  Array.isArray(
+                                      replyTo
+                                  )
+                                      ? replyTo
+                                      : [
+                                            replyTo
+                                        ]
+                          }
+                        : {})
+                });
+
+        if (error) {
+            console.error(
+                "Resend email error:",
+                error
+            );
+
+            throw new Error(
+                error.message ||
+                    "Unable to send email."
+            );
+        }
 
         console.log(
-            `Email sent to ${to}`
+            `Email sent successfully to ${to}. ID: ${data?.id}`
         );
+
+        return data;
     } catch (error) {
         console.error(
             "Email sending failed:",
@@ -64,6 +116,7 @@ const sendEmail = async ({
         throw error;
     }
 };
+
 
 // =========================
 // PASSWORD RESET EMAIL
@@ -211,6 +264,7 @@ const sendPasswordResetEmail =
             html
         });
     };
+
 
 module.exports = {
     sendEmail,

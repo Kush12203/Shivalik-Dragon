@@ -1,22 +1,40 @@
-const nodemailer =
-    require("nodemailer");
+const {
+    sendEmail
+} = require(
+    "../services/emailService"
+);
+
 
 // =========================
-// MAIL TRANSPORTER
+// ESCAPE HTML
 // =========================
 
-const transporter =
-    nodemailer.createTransport({
-        service: "gmail",
+const escapeHtml = (
+    value = ""
+) => {
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+};
 
-        auth: {
-            user:
-                process.env.EMAIL_USER,
-
-            pass:
-                process.env.EMAIL_PASSWORD
-        }
-    });
 
 // =========================
 // SEND CONTACT MESSAGE
@@ -36,6 +54,11 @@ exports.sendContactMessage =
                 message
             } = req.body;
 
+
+            // =========================
+            // VALIDATION
+            // =========================
+
             if (
                 !fullName ||
                 !email ||
@@ -53,114 +76,287 @@ exports.sendContactMessage =
                     });
             }
 
+
+            const cleanName =
+                String(
+                    fullName
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        100
+                    );
+
+            const cleanEmail =
+                String(
+                    email
+                )
+                    .trim()
+                    .toLowerCase()
+                    .slice(
+                        0,
+                        150
+                    );
+
+            const cleanPhone =
+                String(
+                    phone || ""
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        30
+                    );
+
+            const cleanReason =
+                String(
+                    reason
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        100
+                    );
+
+            const cleanMessage =
+                String(
+                    message
+                )
+                    .trim()
+                    .slice(
+                        0,
+                        2000
+                    );
+
+
+            if (
+                !cleanName ||
+                !cleanEmail ||
+                !cleanReason ||
+                !cleanMessage
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Please complete all required fields."
+                    });
+            }
+
+
+            const emailRegex =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (
+                !emailRegex.test(
+                    cleanEmail
+                )
+            ) {
+                return res
+                    .status(400)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Please enter a valid email address."
+                    });
+            }
+
+
             const adminEmail =
                 process.env
-                    .ADMIN_NOTIFICATION_EMAIL ||
-                process.env
-                    .EMAIL_USER;
+                    .ADMIN_NOTIFICATION_EMAIL;
+
+            if (!adminEmail) {
+                console.error(
+                    "ADMIN_NOTIFICATION_EMAIL is not configured."
+                );
+
+                return res
+                    .status(500)
+                    .json({
+                        success:
+                            false,
+
+                        message:
+                            "Unable to send your message right now."
+                    });
+            }
+
+
+            // =========================
+            // SAFE VALUES FOR HTML
+            // =========================
+
+            const safeName =
+                escapeHtml(
+                    cleanName
+                );
+
+            const safeEmail =
+                escapeHtml(
+                    cleanEmail
+                );
+
+            const safePhone =
+                escapeHtml(
+                    cleanPhone ||
+                        "Not provided"
+                );
+
+            const safeReason =
+                escapeHtml(
+                    cleanReason
+                );
+
+            const safeMessage =
+                escapeHtml(
+                    cleanMessage
+                );
+
 
             // =========================
             // EMAIL TO ADMIN
             // =========================
 
-            await transporter.sendMail({
-                from:
-                    `"Shivalik Dragon Website" <${process.env.EMAIL_USER}>`,
-
+            await sendEmail({
                 to:
                     adminEmail,
 
                 replyTo:
-                    email,
+                    cleanEmail,
 
                 subject:
-                    `New Contact Message - ${reason}`,
+                    `New Contact Message - ${cleanReason}`,
 
                 html: `
                     <div
                         style="
-                            font-family: Arial, sans-serif;
-                            max-width: 650px;
-                            margin: auto;
-                            color: #193326;
+                            font-family:
+                                Arial,
+                                Helvetica,
+                                sans-serif;
+                            max-width:650px;
+                            margin:auto;
+                            color:#193326;
                         "
                     >
-                        <h2>
-                            New Contact Message
-                        </h2>
-
-                        <p>
-                            A visitor submitted
-                            the contact form on
-                            Shivalik Dragon.
-                        </p>
+                        <div
+                            style="
+                                background:#166534;
+                                padding:22px;
+                                border-radius:
+                                    16px 16px 0 0;
+                            "
+                        >
+                            <h2
+                                style="
+                                    color:white;
+                                    margin:0;
+                                "
+                            >
+                                New Contact Message
+                            </h2>
+                        </div>
 
                         <div
                             style="
-                                margin-top: 20px;
-                                padding: 18px;
-                                border-radius: 12px;
-                                background: #f4faf6;
+                                padding:24px;
+                                background:#ffffff;
+                                border-radius:
+                                    0 0 16px 16px;
                             "
                         >
                             <p>
-                                <strong>Name:</strong>
-                                ${fullName}
+                                A visitor submitted
+                                the contact form on
+                                Shivalik Dragon.
                             </p>
 
-                            <p>
-                                <strong>Email:</strong>
-                                ${email}
-                            </p>
+                            <div
+                                style="
+                                    margin-top:20px;
+                                    padding:18px;
+                                    border-radius:12px;
+                                    background:#f4faf6;
+                                "
+                            >
+                                <p>
+                                    <strong>
+                                        Name:
+                                    </strong>
 
-                            <p>
-                                <strong>Phone:</strong>
-                                ${phone || "Not provided"}
-                            </p>
+                                    ${safeName}
+                                </p>
 
-                            <p>
-                                <strong>Reason:</strong>
-                                ${reason}
-                            </p>
+                                <p>
+                                    <strong>
+                                        Email:
+                                    </strong>
 
-                            <p>
-                                <strong>Message:</strong>
-                            </p>
+                                    ${safeEmail}
+                                </p>
+
+                                <p>
+                                    <strong>
+                                        Phone:
+                                    </strong>
+
+                                    ${safePhone}
+                                </p>
+
+                                <p>
+                                    <strong>
+                                        Reason:
+                                    </strong>
+
+                                    ${safeReason}
+                                </p>
+
+                                <p>
+                                    <strong>
+                                        Message:
+                                    </strong>
+                                </p>
+
+                                <p
+                                    style="
+                                        white-space:
+                                            pre-line;
+                                    "
+                                >
+                                    ${safeMessage}
+                                </p>
+                            </div>
 
                             <p
                                 style="
-                                    white-space: pre-line;
+                                    margin-top:20px;
+                                    color:#708078;
+                                    font-size:13px;
                                 "
                             >
-                                ${message}
+                                Reply directly to this
+                                email to respond to
+                                ${safeName}.
                             </p>
                         </div>
-
-                        <p
-                            style="
-                                margin-top: 20px;
-                                color: #708078;
-                                font-size: 13px;
-                            "
-                        >
-                            You can reply directly
-                            to this email to respond
-                            to ${fullName}.
-                        </p>
                     </div>
                 `
             });
 
+
             // =========================
-            // ACKNOWLEDGEMENT TO USER
+            // ACKNOWLEDGEMENT
             // =========================
 
-            await transporter.sendMail({
-                from:
-                    `"Shivalik Dragon" <${process.env.EMAIL_USER}>`,
-
+            await sendEmail({
                 to:
-                    email,
+                    cleanEmail,
 
                 subject:
                     "We received your message - Shivalik Dragon",
@@ -168,73 +364,110 @@ exports.sendContactMessage =
                 html: `
                     <div
                         style="
-                            font-family: Arial, sans-serif;
-                            max-width: 650px;
-                            margin: auto;
-                            color: #193326;
+                            font-family:
+                                Arial,
+                                Helvetica,
+                                sans-serif;
+                            max-width:650px;
+                            margin:auto;
+                            color:#193326;
                         "
                     >
-                        <h2>
-                            Thanks for contacting
-                            Shivalik Dragon
-                        </h2>
-
-                        <p>
-                            Hi ${fullName},
-                        </p>
-
-                        <p>
-                            We have received your
-                            message regarding
-                            <strong>${reason}</strong>.
-                        </p>
-
-                        <p>
-                            Our team will get back
-                            to you as soon as
-                            possible.
-                        </p>
 
                         <div
                             style="
-                                margin-top: 22px;
-                                padding: 16px;
-                                border-radius: 12px;
-                                background: #f4faf6;
+                                background:#166534;
+                                padding:22px;
+                                border-radius:
+                                    16px 16px 0 0;
                             "
                         >
-                            <strong>
-                                Your message
-                            </strong>
+                            <h2
+                                style="
+                                    color:white;
+                                    margin:0;
+                                "
+                            >
+                                Shivalik Dragon
+                            </h2>
+                        </div>
+
+                        <div
+                            style="
+                                padding:24px;
+                                background:white;
+                                border-radius:
+                                    0 0 16px 16px;
+                            "
+                        >
+                            <h2>
+                                Thanks for contacting us
+                            </h2>
+
+                            <p>
+                                Hi ${safeName},
+                            </p>
+
+                            <p>
+                                We have received your
+                                message regarding
+                                <strong>
+                                    ${safeReason}
+                                </strong>.
+                            </p>
+
+                            <p>
+                                Our team will get back
+                                to you as soon as
+                                possible.
+                            </p>
+
+                            <div
+                                style="
+                                    margin-top:22px;
+                                    padding:16px;
+                                    border-radius:12px;
+                                    background:#f4faf6;
+                                "
+                            >
+                                <strong>
+                                    Your message
+                                </strong>
+
+                                <p
+                                    style="
+                                        white-space:
+                                            pre-line;
+                                        color:#66756c;
+                                    "
+                                >
+                                    ${safeMessage}
+                                </p>
+                            </div>
 
                             <p
                                 style="
-                                    white-space: pre-line;
-                                    color: #66756c;
+                                    margin-top:24px;
                                 "
                             >
-                                ${message}
+                                Regards,
+                                <br />
+
+                                <strong>
+                                    Shivalik Dragon
+                                </strong>
                             </p>
                         </div>
-
-                        <p
-                            style="
-                                margin-top: 24px;
-                            "
-                        >
-                            Regards,<br/>
-                            <strong>
-                                Shivalik Dragon
-                            </strong>
-                        </p>
                     </div>
                 `
             });
 
+
             return res
                 .status(200)
                 .json({
-                    success: true,
+                    success:
+                        true,
 
                     message:
                         "Message sent successfully."
@@ -249,7 +482,8 @@ exports.sendContactMessage =
             return res
                 .status(500)
                 .json({
-                    success: false,
+                    success:
+                        false,
 
                     message:
                         "Unable to send your message right now."
