@@ -26,7 +26,8 @@ import Location from "./pages/Location/Location";
 import Contact from "./pages/Contact/Contact";
 import NotFound from "./pages/NotFound/NotFound";
 import AdminEnquiries from "./pages/AdminEnquiries/AdminEnquiries";
-
+import Gallery from "./pages/Gallery/Gallery";
+import AdminGallery from "./pages/AdminGallery/AdminGallery";
 import {
     useAuth
 } from "./context/AuthContext";
@@ -223,6 +224,18 @@ function App() {
     element={
         <AdminRoute>
             <AdminEnquiries />
+        </AdminRoute>
+    }
+/>
+<Route
+    path="/gallery"
+    element={<Gallery />}
+/>
+<Route
+    path="/admin/gallery"
+    element={
+        <AdminRoute>
+            <AdminGallery />
         </AdminRoute>
     }
 />

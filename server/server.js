@@ -52,7 +52,10 @@ const contactRoutes =
     require(
         "./routes/contactRoutes"
     );
-
+const galleryRoutes =
+    require(
+        "./routes/galleryRoutes"
+    );
 const app =
     express();
 
@@ -305,7 +308,10 @@ app.use(
     contactLimiter,
     contactRoutes
 );
-
+app.use(
+    "/api/gallery",
+    galleryRoutes
+);
 
 // =========================
 // 404

@@ -18,6 +18,7 @@ import {
 
 import {
     ChevronDown,
+    Images,
     LogIn,
     LogOut,
     Mail,
@@ -448,7 +449,18 @@ export default function Navbar() {
                         >
                             Contact
                         </NavLink>
-
+                        <NavLink
+    to="/gallery"
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "nav-link active"
+            : "nav-link"
+    }
+>
+    Gallery
+</NavLink>
                     </nav>
 
 
@@ -692,7 +704,21 @@ export default function Navbar() {
 
                                                         Manage Products
                                                     </button>
+                                                    
+                                                    <button
+    type="button"
+    onClick={() =>
+        goTo(
+            "/admin/gallery"
+        )
+    }
+>
+    <Images
+        size={18}
+    />
 
+    Manage Gallery
+</button>
 
                                                     <button
                                                         type="button"
@@ -975,7 +1001,23 @@ export default function Navbar() {
                                 >
                                     Contact
                                 </NavLink>
-
+ <NavLink
+    to="/gallery"
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "mobile-nav-link active"
+            : "mobile-nav-link"
+    }
+    onClick={() =>
+        setMenuOpen(
+            false
+        )
+    }
+>
+    Gallery
+</NavLink>
 
                                 <NavLink
                                     to="/cart"
@@ -1130,6 +1172,24 @@ export default function Navbar() {
     }
 >
     Manage Products
+</NavLink>
+
+<NavLink
+    to="/admin/gallery"
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "mobile-nav-link active"
+            : "mobile-nav-link"
+    }
+    onClick={() =>
+        setMenuOpen(
+            false
+        )
+    }
+>
+    Manage Gallery
 </NavLink>
 
 <NavLink
