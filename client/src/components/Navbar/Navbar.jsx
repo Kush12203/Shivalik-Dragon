@@ -1094,56 +1094,79 @@ export default function Navbar() {
                                                 </span>
 
 
-                                                <NavLink
-                                                    to="/admin"
-                                                    className="mobile-nav-link"
-                                                    onClick={() =>
-                                                        setMenuOpen(
-                                                            false
-                                                        )
-                                                    }
-                                                >
-                                                    Admin Panel
-                                                </NavLink>
+                                               <NavLink
+    to="/admin"
+    end
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "mobile-nav-link active"
+            : "mobile-nav-link"
+    }
+    onClick={() =>
+        setMenuOpen(
+            false
+        )
+    }
+>
+    Admin Panel
+</NavLink>
 
 
-                                                <NavLink
-                                                    to="/admin/products"
-                                                    className="mobile-nav-link"
-                                                    onClick={() =>
-                                                        setMenuOpen(
-                                                            false
-                                                        )
-                                                    }
-                                                >
-                                                    Manage Products
-                                                </NavLink>
+                                              <NavLink
+    to="/admin/products"
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "mobile-nav-link active"
+            : "mobile-nav-link"
+    }
+    onClick={() =>
+        setMenuOpen(
+            false
+        )
+    }
+>
+    Manage Products
+</NavLink>
 
+<NavLink
+    to="/admin/users"
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "mobile-nav-link active"
+            : "mobile-nav-link"
+    }
+    onClick={() =>
+        setMenuOpen(
+            false
+        )
+    }
+>
+    Manage Users
+</NavLink>
 
-                                                <NavLink
-                                                    to="/admin/users"
-                                                    className="mobile-nav-link"
-                                                    onClick={() =>
-                                                        setMenuOpen(
-                                                            false
-                                                        )
-                                                    }
-                                                >
-                                                    Manage Users
-                                                </NavLink>
-
-
-                                                <NavLink
-                                                    to="/admin/enquiries"
-                                                    className="mobile-nav-link"
-                                                    onClick={() =>
-                                                        setMenuOpen(
-                                                            false
-                                                        )
-                                                    }
-                                                >
-                                                    Enquiries
-                                                </NavLink>
+<NavLink
+    to="/admin/enquiries"
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "mobile-nav-link active"
+            : "mobile-nav-link"
+    }
+    onClick={() =>
+        setMenuOpen(
+            false
+        )
+    }
+>
+    Enquiries
+</NavLink>
                                             </>
                                         )}
 

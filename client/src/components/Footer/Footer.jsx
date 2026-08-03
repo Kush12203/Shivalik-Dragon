@@ -50,7 +50,9 @@ export default function Footer() {
 
                 <div className="footer-main">
 
-                    {/* BRAND */}
+                    {/* =========================
+                        BRAND
+                    ========================= */}
 
                     <div className="footer-brand">
 
@@ -97,6 +99,72 @@ export default function Footer() {
 
 
                     {/* =========================
+                        QUICK ACTIONS
+                    ========================= */}
+
+                    <div className="footer-quick-actions">
+
+                        <span className="footer-section-label">
+                            QUICK ACTIONS
+                        </span>
+
+                        <div className="footer-actions">
+
+                            {/* SHOP NOW */}
+
+                            <button
+                                type="button"
+                                className="footer-shop-button"
+                                onClick={() =>
+                                    goTo("/products")
+                                }
+                            >
+                                Shop Now
+
+                                <ArrowUpRight
+                                    size={16}
+                                />
+                            </button>
+
+
+                            {/* VISIT FARM */}
+
+                            <button
+                                type="button"
+                                className="footer-location-button"
+                                onClick={() =>
+                                    goTo("/location")
+                                }
+                            >
+                                <MapPin
+                                    size={16}
+                                />
+
+                                Visit Farm
+                            </button>
+
+
+                            {/* WHATSAPP */}
+
+                            <a
+                                href="https://wa.me/919426137902"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="footer-whatsapp-button"
+                            >
+                                <MessageCircle
+                                    size={16}
+                                />
+
+                                WhatsApp
+                            </a>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* =========================
                         CONTACT
                     ========================= */}
 
@@ -108,12 +176,16 @@ export default function Footer() {
 
                         <div className="footer-contact-grid">
 
+                            {/* EMAIL */}
+
                             <a
                                 href="mailto:shivalikdragonfarm@gmail.com"
                                 className="footer-contact-card"
                             >
                                 <div className="footer-contact-icon">
-                                    <Mail size={17} />
+                                    <Mail
+                                        size={17}
+                                    />
                                 </div>
 
                                 <div>
@@ -128,12 +200,16 @@ export default function Footer() {
                             </a>
 
 
+                            {/* PHONE */}
+
                             <a
                                 href="tel:+919426137902"
                                 className="footer-contact-card"
                             >
                                 <div className="footer-contact-icon">
-                                    <Phone size={17} />
+                                    <Phone
+                                        size={17}
+                                    />
                                 </div>
 
                                 <div>
@@ -147,6 +223,8 @@ export default function Footer() {
                                 </div>
                             </a>
 
+
+                            {/* INSTAGRAM */}
 
                             <a
                                 href="https://www.instagram.com/shivalikdragon/"
@@ -173,68 +251,6 @@ export default function Footer() {
 
                     </div>
 
-
-                    {/* =========================
-                        QUICK ACTIONS
-                    ========================= */}
-
-                    <div className="footer-quick-actions">
-
-                        <span className="footer-section-label">
-                            QUICK ACTIONS
-                        </span>
-
-                        <div className="footer-actions">
-
-                            <button
-                                type="button"
-                                className="footer-shop-button"
-
-                                onClick={() =>
-                                    goTo("/products")
-                                }
-                            >
-                                Shop Now
-
-                                <ArrowUpRight
-                                    size={16}
-                                />
-                            </button>
-
-
-                            <button
-                                type="button"
-                                className="footer-location-button"
-
-                                onClick={() =>
-                                    goTo("/location")
-                                }
-                            >
-                                <MapPin
-                                    size={16}
-                                />
-
-                                Visit Farm
-                            </button>
-
-
-                            <a
-                                href="https://wa.me/919426137902"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="footer-whatsapp-button"
-                            >
-                                <MessageCircle
-                                    size={16}
-                                />
-
-                                WhatsApp
-                            </a>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
 
@@ -254,7 +270,6 @@ export default function Footer() {
                     <button
                         type="button"
                         className="footer-back-top"
-
                         onClick={scrollTop}
                     >
                         Back to top ↑
