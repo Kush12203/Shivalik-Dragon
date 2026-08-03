@@ -1,0 +1,851 @@
+.location-page {
+    position: relative;
+
+    min-height: 100vh;
+
+    padding:
+        95px 24px
+        90px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 5% 18%,
+            rgba(30, 173, 81, 0.09),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 96% 82%,
+            rgba(227, 38, 79, 0.05),
+            transparent 27%
+        ),
+        #f6faf6;
+}
+
+.location-container {
+    position: relative;
+
+    z-index: 2;
+
+    width:
+        min(
+            1250px,
+            100%
+        );
+
+    margin: auto;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.location-header {
+    max-width: 760px;
+
+    margin-bottom: 45px;
+}
+
+.location-badge {
+    width: fit-content;
+
+    padding:
+        9px 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    border-radius: 100px;
+
+    color: #087a3c;
+
+    background:
+        rgba(
+            21,
+            148,
+            71,
+            0.08
+        );
+
+    border:
+        1px solid
+        rgba(
+            21,
+            148,
+            71,
+            0.13
+        );
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    letter-spacing: 0.9px;
+}
+
+.location-header h1 {
+    margin:
+        17px 0
+        14px;
+
+    color: #102018;
+
+    font-size:
+        clamp(
+            48px,
+            6vw,
+            74px
+        );
+
+    line-height: 0.98;
+
+    letter-spacing: -3.5px;
+
+    font-weight: 900;
+}
+
+.location-header h1 strong {
+    color: #087a3c;
+}
+
+.location-header p {
+    max-width: 650px;
+
+    margin: 0;
+
+    color: #66776d;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================
+   MAIN GRID
+========================= */
+
+.location-main-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(
+            0,
+            1.6fr
+        )
+        minmax(
+            290px,
+            0.7fr
+        );
+
+    gap: 20px;
+
+    align-items: stretch;
+}
+
+
+/* =========================
+   MAP CARD
+========================= */
+
+.location-map-card {
+    padding: 17px;
+
+    border-radius: 25px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.94
+        );
+
+    border:
+        1px solid
+        rgba(
+            10,
+            92,
+            48,
+            0.07
+        );
+
+    box-shadow:
+        0 22px 65px
+        rgba(
+            18,
+            63,
+            34,
+            0.08
+        );
+}
+
+.location-map-header {
+    padding:
+        5px 5px
+        16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.location-map-header span {
+    color: #159447;
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    letter-spacing: 0.8px;
+}
+
+.location-map-header h2 {
+    margin:
+        5px 0
+        0;
+
+    color: #1a3527;
+
+    font-size: 19px;
+
+    font-weight: 900;
+}
+
+.location-live-badge {
+    padding:
+        7px 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    border-radius: 100px;
+
+    color: #53655a;
+
+    background: #f3f8f4;
+
+    font-size: 10px;
+
+    font-weight: 750;
+}
+
+.location-live-badge span {
+    width: 7px;
+
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #19a751;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            25,
+            167,
+            81,
+            0.1
+        );
+}
+
+
+/* =========================
+   MAP
+========================= */
+
+.location-map {
+    position: relative;
+
+    height: 510px;
+
+    overflow: hidden;
+
+    border-radius: 19px;
+
+    background: #edf4ef;
+}
+
+.location-map iframe {
+    width: 100%;
+
+    height: 100%;
+
+    border: none;
+
+    display: block;
+}
+
+.location-map-placeholder {
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    text-align: center;
+
+    color: #159447;
+}
+
+.location-map-placeholder strong {
+    color: #284638;
+
+    font-size: 14px;
+}
+
+.location-map-placeholder span {
+    max-width: 280px;
+
+    color: #7a8980;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   SIDE
+========================= */
+
+.location-side {
+    display: grid;
+
+    gap: 20px;
+}
+
+.location-info-card,
+.location-review-card {
+    padding: 25px;
+
+    border-radius: 23px;
+
+    background: white;
+
+    border:
+        1px solid
+        rgba(
+            10,
+            92,
+            48,
+            0.07
+        );
+
+    box-shadow:
+        0 18px 52px
+        rgba(
+            18,
+            63,
+            34,
+            0.07
+        );
+}
+
+.location-info-icon {
+    width: 46px;
+
+    height: 46px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 19px;
+
+    border-radius: 14px;
+
+    color: #087a3c;
+
+    background: #e9f8ed;
+}
+
+.location-card-label {
+    color: #159447;
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    letter-spacing: 0.9px;
+}
+
+.location-info-card h2 {
+    margin:
+        7px 0
+        9px;
+
+    color: #193326;
+
+    font-size: 22px;
+
+    font-weight: 900;
+
+    letter-spacing: -0.6px;
+}
+
+.location-info-card p {
+    margin:
+        0 0
+        20px;
+
+    color: #718078;
+
+    font-size: 11px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================
+   BUTTON
+========================= */
+
+.location-primary-button {
+    width: 100%;
+
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #066e37,
+            #11934a
+        );
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    box-shadow:
+        0 12px 27px
+        rgba(
+            8,
+            126,
+            59,
+            0.18
+        );
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.location-primary-button:hover:not(
+    :disabled
+) {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 16px 33px
+        rgba(
+            8,
+            126,
+            59,
+            0.23
+        );
+}
+
+.location-primary-button:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   REVIEW CARD
+========================= */
+
+.location-review-card {
+    background:
+        linear-gradient(
+            145deg,
+            #0a4c2d,
+            #08753b
+        );
+
+    color: white;
+}
+
+.review-stars {
+    margin-bottom: 15px;
+
+    display: flex;
+
+    gap: 3px;
+
+    color: #ffd769;
+}
+
+.location-review-card > span {
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.65
+        );
+
+    font-size: 10px;
+
+    font-weight: 850;
+
+    letter-spacing: 0.9px;
+}
+
+.location-review-card h3 {
+    margin:
+        7px 0
+        9px;
+
+    color: white;
+
+    font-size: 20px;
+
+    line-height: 1.15;
+
+    font-weight: 900;
+}
+
+.location-review-card h3 strong {
+    color: #bcefcf;
+}
+
+.location-review-card p {
+    margin:
+        0 0
+        20px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.74
+        );
+
+    font-size: 11px;
+
+    line-height: 1.7;
+}
+
+.location-review-card button {
+    width: 100%;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.18
+        );
+
+    border-radius: 12px;
+
+    color: #143925;
+
+    background: white;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 850;
+
+    transition:
+        transform 0.2s ease;
+}
+
+.location-review-card button:hover:not(
+    :disabled
+) {
+    transform:
+        translateY(-2px);
+}
+
+.location-review-card button:disabled {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.location-features {
+    margin-top: 20px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            1fr
+        );
+
+    gap: 13px;
+}
+
+.location-feature {
+    padding: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    border-radius: 17px;
+
+    color: #159447;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.88
+        );
+
+    border:
+        1px solid
+        #e2ebe4;
+}
+
+.location-feature strong,
+.location-feature span {
+    display: block;
+}
+
+.location-feature strong {
+    color: #294638;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+.location-feature span {
+    margin-top: 3px;
+
+    color: #7f8d85;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.location-glow {
+    position: absolute;
+
+    width: 450px;
+
+    height: 450px;
+
+    border-radius: 50%;
+
+    filter:
+        blur(120px);
+
+    opacity: 0.15;
+}
+
+.location-glow-one {
+    top: 300px;
+
+    left: -250px;
+
+    background: #56ca7f;
+}
+
+.location-glow-two {
+    right: -250px;
+
+    bottom: 150px;
+
+    background: #f27088;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (
+    max-width: 950px
+) {
+    .location-main-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .location-side {
+        grid-template-columns:
+            1fr
+            1fr;
+    }
+
+    .location-map {
+        height: 450px;
+    }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (
+    max-width: 650px
+) {
+    .location-page {
+        padding:
+            60px 14px
+            55px;
+    }
+
+    .location-header {
+        margin-bottom: 28px;
+    }
+
+    .location-badge {
+        font-size: 9px;
+    }
+
+    .location-header h1 {
+        font-size: 45px;
+
+        letter-spacing: -2.5px;
+    }
+
+    .location-header p {
+        font-size: 13px;
+    }
+
+    .location-map-card {
+        padding: 11px;
+
+        border-radius: 20px;
+    }
+
+    .location-map-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .location-map-header span {
+        font-size: 9px;
+    }
+
+    .location-map-header h2 {
+        font-size: 18px;
+    }
+
+    .location-live-badge {
+        font-size: 9px;
+    }
+
+    .location-map {
+        height: 360px;
+
+        border-radius: 15px;
+    }
+
+    .location-side {
+        grid-template-columns:
+            1fr;
+    }
+
+    .location-info-card,
+    .location-review-card {
+        padding: 20px;
+    }
+
+    .location-card-label {
+        font-size: 9px;
+    }
+
+    .location-info-card p,
+    .location-review-card p {
+        font-size: 11px;
+    }
+
+    .location-primary-button,
+    .location-review-card button {
+        font-size: 11px;
+    }
+
+    .location-features {
+        grid-template-columns:
+            1fr;
+    }
+
+    .location-feature strong {
+        font-size: 11px;
+    }
+
+    .location-feature span {
+        font-size: 10px;
+    }
+}
