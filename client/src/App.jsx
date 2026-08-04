@@ -28,6 +28,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import AdminEnquiries from "./pages/AdminEnquiries/AdminEnquiries";
 import Gallery from "./pages/Gallery/Gallery";
 import AdminGallery from "./pages/AdminGallery/AdminGallery";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import {
     useAuth
 } from "./context/AuthContext";
@@ -147,6 +148,19 @@ function App() {
                         )
                     }
                 />
+                <Route
+    path="/forgot-password"
+    element={
+        user ? (
+            <Navigate
+                to="/"
+                replace
+            />
+        ) : (
+            <ForgotPassword />
+        )
+    }
+/>
 <Route
     path="/products"
     element={
