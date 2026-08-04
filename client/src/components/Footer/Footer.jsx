@@ -147,7 +147,7 @@ export default function Footer() {
                             {/* WHATSAPP */}
 
                             <a
-                                href="https://wa.me/919426137902"
+                                href="https://wa.me/917359760171"
                                 target="_blank"
                                 rel="noreferrer"
                                 className="footer-whatsapp-button"

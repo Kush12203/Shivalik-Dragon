@@ -14,15 +14,17 @@ import "./forgotPassword.css";
 export default function ForgotPassword() {
     const navigate =
         useNavigate();
+    // const whatsappNumber =
+    // import.meta.env.VITE_WHATSAPP_NUMBER;
 
     const openWhatsApp = () => {
         const message =
             "Hi Shivalik Dragon, I forgot my account password and need help recovering my account.";
 
         const url =
-            `https://wa.me/919426137902?text=${encodeURIComponent(
-                message
-            )}`;
+    `https://wa.me/917359760171?text=${encodeURIComponent(
+        message
+    )}`;
 
         window.open(
             url,
