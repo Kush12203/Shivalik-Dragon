@@ -778,111 +778,609 @@ input::placeholder {
 }
 
 
-/* ========================================
-   TABLET
-======================================== */
+/* ========================================================
+   TABLET / MOBILE
+   DESKTOP ABOVE 900px REMAINS UNCHANGED
+======================================================== */
 
-@media (
-    max-width: 900px
-) {
-    .auth-wrapper {
-        grid-template-columns:
-            1fr;
+@media (max-width: 900px) {
 
-        gap: 25px;
+    .auth-page {
+        width: 100%;
 
-        max-width: 650px;
+        min-height:
+            calc(
+                100vh - 72px
+            );
+
+        padding:
+            48px 20px
+            55px;
+
+        box-sizing: border-box;
+
+        overflow-x: hidden;
     }
 
+
+    /* =========================
+       WRAPPER
+    ========================= */
+
+    .auth-wrapper,
+    .register-wrapper {
+        width: 100%;
+
+        max-width: 620px;
+
+        margin-inline: auto;
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(
+                0,
+                1fr
+            );
+
+        gap: 28px;
+
+        box-sizing: border-box;
+    }
+
+
+    /* =========================
+       HERO
+    ========================= */
+
     .auth-side {
+        width: 100%;
+
+        padding:
+            18px 8px
+            4px;
+
+        box-sizing: border-box;
+
         text-align: center;
+
+        overflow: hidden;
     }
 
     .auth-side-badge {
-        margin: auto;
+        margin-inline: auto;
+    }
+
+    .auth-side h1 {
+        width: 100%;
+
+        max-width: 580px;
+
+        margin:
+            18px auto
+            14px;
+
+        font-size:
+            clamp(
+                38px,
+                6vw,
+                52px
+            );
+
+        line-height: 1.04;
+
+        letter-spacing:
+            -2px;
+
+        white-space: normal;
+
+        overflow-wrap: normal;
+
+        word-break: normal;
+    }
+
+    .auth-side h1 span {
+        white-space: normal;
     }
 
     .auth-side > p {
-        margin: auto;
+        width: 100%;
+
+        max-width: 500px;
+
+        margin-inline: auto;
+
+        font-size: 14px;
+
+        line-height: 1.7;
     }
 
-    .auth-benefits {
-        display: none;
-    }
 
+    /* =========================
+       HIDE DESKTOP DETAILS
+    ========================= */
+
+    .auth-benefits,
     .auth-stat-grid {
         display: none;
+    }
+
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .auth-card,
+    .auth-card-large {
+        width: 100%;
+
+        max-width: 100%;
+
+        padding:
+            30px 28px;
+
+        box-sizing: border-box;
+
+        border-radius: 24px;
+    }
+
+
+    /* =========================
+       FORM SAFETY
+    ========================= */
+
+    .auth-form,
+    .auth-field,
+    .auth-form-grid {
+        width: 100%;
+
+        min-width: 0;
+
+        box-sizing: border-box;
+    }
+
+    .auth-input-wrapper {
+        width: 100%;
+
+        min-width: 0;
+
+        box-sizing: border-box;
+    }
+
+    .auth-input-wrapper input {
+        min-width: 0;
+    }
+
+
+    /* =========================
+       GOOGLE BUTTON
+    ========================= */
+
+    .google-login-wrapper {
+        width: 100%;
+
+        max-width: 100%;
+
+        overflow: hidden;
+
+        box-sizing: border-box;
+    }
+
+    .google-login-wrapper > div,
+    .google-login-wrapper iframe {
+        max-width: 100% !important;
     }
 }
 
 
-/* ========================================
-   MOBILE
-======================================== */
+/* ========================================================
+   LARGE / NORMAL PHONES
+======================================================== */
 
-@media (
-    max-width: 600px
-) {
+@media (max-width: 600px) {
+
     .auth-page {
         padding:
-            55px 14px
-            35px;
+            34px 14px
+            42px;
     }
+
+
+    /* =========================
+       HERO
+    ========================= */
 
     .auth-side {
         padding:
-            15px 4px;
-    }
-
-    .auth-side h1 {
-        font-size: 41px;
-
-        letter-spacing: -2px;
-    }
-
-    .auth-side > p {
-        font-size: 14px;
+            12px 4px
+            2px;
     }
 
     .auth-side-badge {
+        padding:
+            8px 12px;
+
+        font-size: 10px;
+
+        letter-spacing:
+            0.7px;
+    }
+
+    .auth-side h1 {
+        max-width: 430px;
+
+        margin:
+            16px auto
+            13px;
+
+        font-size:
+            clamp(
+                33px,
+                9vw,
+                41px
+            );
+
+        line-height: 1.04;
+
+        letter-spacing:
+            -1.7px;
+    }
+
+    .auth-side > p {
+        max-width: 390px;
+
+        font-size: 13px;
+
+        line-height: 1.7;
+    }
+
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .auth-card,
+    .auth-card-large {
+        padding:
+            25px 20px;
+
+        border-radius: 21px;
+    }
+
+    .auth-card-header > span {
+        font-size: 10px;
+    }
+
+    .auth-card-header h2 {
+        margin-top: 7px;
+
+        font-size: 27px;
+
+        letter-spacing:
+            -1px;
+    }
+
+    .auth-card-header p {
+        font-size: 12px;
+    }
+
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .auth-form {
+        margin-top: 24px;
+
+        gap: 16px;
+    }
+
+    .auth-form-grid {
+        grid-template-columns:
+            minmax(
+                0,
+                1fr
+            );
+
+        gap: 16px;
+    }
+
+    .auth-field label {
+        margin-bottom: 7px;
+
+        font-size: 12px;
+    }
+
+    .auth-field-top {
+        gap: 10px;
+    }
+
+    .auth-field-top a {
+        flex-shrink: 0;
+
         font-size: 11px;
+    }
+
+    .auth-input-wrapper {
+        height: 50px;
+
+        padding:
+            0 12px;
+
+        gap: 9px;
+
+        border-radius: 13px;
+    }
+
+    .auth-input-wrapper input {
+        font-size: 13px;
+    }
+
+    .password-toggle {
+        flex-shrink: 0;
+    }
+
+
+    /* =========================
+       BUTTON
+    ========================= */
+
+    .auth-submit {
+        width: 100%;
+
+        height: 50px;
+
+        border-radius: 13px;
+
+        font-size: 13px;
+    }
+
+
+    /* =========================
+       DIVIDER / SWITCH
+    ========================= */
+
+    .auth-divider {
+        margin:
+            22px 0
+            18px;
+    }
+
+    .auth-divider span,
+    .auth-switch {
+        font-size: 11px;
+    }
+
+    .auth-switch {
+        margin-top: 20px;
+
+        line-height: 1.5;
+    }
+}
+
+
+/* ========================================================
+   S24 ULTRA / LARGE MOBILE RANGE
+======================================================== */
+
+@media (
+    min-width: 401px
+) and (
+    max-width: 480px
+) {
+
+    .auth-page {
+        padding-inline: 16px;
+    }
+
+    .auth-wrapper,
+    .register-wrapper {
+        max-width: 440px;
+    }
+
+    .auth-side h1 {
+        max-width: 410px;
+
+        font-size:
+            clamp(
+                35px,
+                8.8vw,
+                40px
+            );
     }
 
     .auth-card,
     .auth-card-large {
         padding:
-            25px 18px;
+            26px 22px;
+    }
+}
 
-        border-radius: 21px;
+
+/* ========================================================
+   NORMAL MOBILE
+======================================================== */
+
+@media (max-width: 400px) {
+
+    .auth-page {
+        padding:
+            30px 12px
+            38px;
     }
 
-    .auth-form-grid {
-        grid-template-columns:
-            1fr;
+    .auth-wrapper,
+    .register-wrapper {
+        gap: 22px;
+    }
+
+    .auth-side {
+        padding-inline: 2px;
+    }
+
+    .auth-side h1 {
+        max-width: 360px;
+
+        font-size:
+            clamp(
+                31px,
+                9.2vw,
+                36px
+            );
+
+        letter-spacing:
+            -1.45px;
+    }
+
+    .auth-side > p {
+        max-width: 345px;
+
+        font-size: 12px;
+    }
+
+    .auth-card,
+    .auth-card-large {
+        padding:
+            23px 16px;
+
+        border-radius: 19px;
     }
 
     .auth-card-header h2 {
-        font-size: 28px;
+        font-size: 25px;
+    }
+
+    .auth-input-wrapper {
+        height: 49px;
+    }
+}
+
+
+/* ========================================================
+   SMALL MOBILE
+======================================================== */
+
+@media (max-width: 360px) {
+
+    .auth-page {
+        padding:
+            27px 10px
+            34px;
+    }
+
+    .auth-side-badge {
+        padding:
+            7px 10px;
+
+        font-size: 9px;
+    }
+
+    .auth-side h1 {
+        max-width: 320px;
+
+        font-size: 30px;
+
+        line-height: 1.05;
+
+        letter-spacing:
+            -1.2px;
+    }
+
+    .auth-side > p {
+        max-width: 315px;
+
+        font-size: 11.5px;
+    }
+
+    .auth-card,
+    .auth-card-large {
+        padding:
+            21px 14px;
+    }
+
+    .auth-card-header h2 {
+        font-size: 23px;
     }
 
     .auth-card-header p {
-        font-size: 13px;
+        font-size: 11px;
     }
 
-    .auth-field label {
-        font-size: 13px;
+    .auth-field-top {
+        align-items: flex-end;
+    }
+
+    .auth-field-top a {
+        font-size: 10px;
+    }
+
+    .auth-input-wrapper {
+        height: 48px;
+
+        padding:
+            0 10px;
     }
 
     .auth-input-wrapper input {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .auth-submit {
-        font-size: 14px;
+        height: 48px;
+
+        font-size: 12px;
+    }
+}
+
+
+/* ========================================================
+   MOBILE LANDSCAPE
+======================================================== */
+
+@media (
+    max-width: 900px
+)
+and (
+    max-height: 560px
+)
+and (
+    orientation: landscape
+) {
+
+    .auth-page {
+        padding:
+            25px 20px
+            35px;
     }
 
-    .auth-divider span,
-    .auth-switch {
+    .auth-wrapper,
+    .register-wrapper {
+        max-width: 650px;
+
+        gap: 18px;
+    }
+
+    .auth-side {
+        padding-top: 5px;
+    }
+
+    .auth-side h1 {
+        margin:
+            11px auto
+            8px;
+
+        font-size: 32px;
+    }
+
+    .auth-side > p {
         font-size: 12px;
+
+        line-height: 1.5;
+    }
+
+    .auth-card,
+    .auth-card-large {
+        padding:
+            22px 24px;
     }
 }
