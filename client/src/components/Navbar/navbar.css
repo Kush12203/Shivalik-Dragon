@@ -1705,7 +1705,6 @@
     }
 }
 
-
 /* ========================================
    SMALL MOBILE
 ======================================== */
@@ -1734,18 +1733,45 @@
         display: none;
     }
 
+    /* Keep Sign In text visible on mobile */
     .signin-button {
-        width: 42px;
+        width: auto;
 
-        padding: 0;
+        height: 41px;
 
-        font-size: 0;
+        padding:
+            0 11px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 6px;
+
+        flex-shrink: 0;
+
+        font-size: 10px;
+
+        font-weight: 850;
+
+        white-space: nowrap;
+    }
+
+    .signin-button svg {
+        width: 16px;
+        height: 16px;
+
+        flex-shrink: 0;
     }
 
     .navbar-cart-button,
     .mobile-menu-button {
         width: 41px;
         height: 41px;
+
+        flex-shrink: 0;
     }
 
     .account-button {
