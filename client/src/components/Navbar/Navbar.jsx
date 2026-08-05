@@ -704,7 +704,21 @@ export default function Navbar() {
 
                                                         Manage Products
                                                     </button>
-                                                    
+                                                    <button
+    type="button"
+
+    onClick={() =>
+        goTo(
+            "/admin/customers"
+        )
+    }
+>
+    <UsersRound
+        size={18}
+    />
+
+    Customers
+</button>
                                                     <button
     type="button"
     onClick={() =>
@@ -1172,6 +1186,26 @@ export default function Navbar() {
     }
 >
     Manage Products
+</NavLink>
+
+<NavLink
+    to="/admin/customers"
+
+    className={({
+        isActive
+    }) =>
+        isActive
+            ? "mobile-nav-link active"
+            : "mobile-nav-link"
+    }
+
+    onClick={() =>
+        setMenuOpen(
+            false
+        )
+    }
+>
+    Customers
 </NavLink>
 
 <NavLink

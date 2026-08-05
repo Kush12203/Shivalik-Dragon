@@ -56,6 +56,10 @@ const galleryRoutes =
     require(
         "./routes/galleryRoutes"
     );
+const customerRoutes =
+    require(
+        "./routes/customerRoutes"
+    );
 const app =
     express();
 
@@ -311,6 +315,10 @@ app.use(
 app.use(
     "/api/gallery",
     galleryRoutes
+);
+app.use(
+    "/api/customers",
+    customerRoutes
 );
 
 // =========================

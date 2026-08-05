@@ -29,13 +29,18 @@ import AdminEnquiries from "./pages/AdminEnquiries/AdminEnquiries";
 import Gallery from "./pages/Gallery/Gallery";
 import AdminGallery from "./pages/AdminGallery/AdminGallery";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import AdminCustomers from "./pages/AdminCustomers/AdminCustomers";
+import CustomerProfile from "./pages/CustomerProfile/CustomerProfile";
+
 import {
     useAuth
 } from "./context/AuthContext";
 
+
 // =========================
-// PROTECTED ROUTE
+// ADMIN ROUTE
 // =========================
+
 function AdminRoute({
     children
 }) {
@@ -63,6 +68,11 @@ function AdminRoute({
     return children;
 }
 
+
+// =========================
+// PROTECTED ROUTE
+// =========================
+
 function ProtectedRoute({
     children
 }) {
@@ -89,37 +99,61 @@ function ProtectedRoute({
     return children;
 }
 
+
+// =========================
+// APP
+// =========================
+
 function App() {
     const {
         user,
         authLoading
     } = useAuth();
 
+
     if (authLoading) {
         return (
             <div className="app-loader">
+
                 <div className="app-loader-ring" />
 
                 <p>
                     Loading Shivalik Dragon...
                 </p>
+
             </div>
         );
     }
 
+
     return (
         <Routes>
+
+            {/* =========================
+                MAIN LAYOUT
+            ========================= */}
+
             <Route
                 element={
                     <MainLayout />
                 }
             >
+
+                {/* =========================
+                    HOME
+                ========================= */}
+
                 <Route
                     path="/"
                     element={
                         <Home />
                     }
                 />
+
+
+                {/* =========================
+                    LOGIN
+                ========================= */}
 
                 <Route
                     path="/login"
@@ -135,6 +169,11 @@ function App() {
                     }
                 />
 
+
+                {/* =========================
+                    REGISTER
+                ========================= */}
+
                 <Route
                     path="/register"
                     element={
@@ -148,111 +187,83 @@ function App() {
                         )
                     }
                 />
+
+
+                {/* =========================
+                    FORGOT PASSWORD
+                ========================= */}
+
                 <Route
-    path="/forgot-password"
-    element={
-        user ? (
-            <Navigate
-                to="/"
-                replace
-            />
-        ) : (
-            <ForgotPassword />
-        )
-    }
-/>
-<Route
-    path="/products"
-    element={
-        <Products />
-    }
-/>
+                    path="/forgot-password"
+                    element={
+                        user ? (
+                            <Navigate
+                                to="/"
+                                replace
+                            />
+                        ) : (
+                            <ForgotPassword />
+                        )
+                    }
+                />
 
-<Route
-    path="/cart"
-    element={
-        <Cart />
-    }
-/>
 
-<Route
-    path="/checkout"
-    element={
-        <ProtectedRoute>
-            <Checkout />
-        </ProtectedRoute>
-    }
-/>
-<Route
-    path="/orders"
-    element={
-        <ProtectedRoute>
-            <Orders />
-        </ProtectedRoute>
-    }
-/>
-<Route
-    path="/admin"
-    element={
-        <AdminRoute>
-            <Admin />
-        </AdminRoute>
-    }
-/>
- <Route
-    path="/admin/products"
-    element={
-        <AdminRoute>
-            <AdminProducts />
-        </AdminRoute>
-    }
-/> 
-<Route
-    path="/admin/users"
-    element={
-        <AdminRoute>
-            <AdminUsers />
-        </AdminRoute>
-    }
-/>
-{/* <Route
-    path="/about"
-    element={
-        <About />
-    }
-/> */}
-<Route
-    path="/location"
-    element={
-        <Location />
-    }
-/>
-<Route
-    path="/contact"
-    element={
-        <Contact />
-    }
-/>
-<Route
-    path="/admin/enquiries"
-    element={
-        <AdminRoute>
-            <AdminEnquiries />
-        </AdminRoute>
-    }
-/>
-<Route
-    path="/gallery"
-    element={<Gallery />}
-/>
-<Route
-    path="/admin/gallery"
-    element={
-        <AdminRoute>
-            <AdminGallery />
-        </AdminRoute>
-    }
-/>
+                {/* =========================
+                    PRODUCTS
+                ========================= */}
+
+                <Route
+                    path="/products"
+                    element={
+                        <Products />
+                    }
+                />
+
+
+                {/* =========================
+                    CART
+                ========================= */}
+
+                <Route
+                    path="/cart"
+                    element={
+                        <Cart />
+                    }
+                />
+
+
+                {/* =========================
+                    CHECKOUT
+                ========================= */}
+
+                <Route
+                    path="/checkout"
+                    element={
+                        <ProtectedRoute>
+                            <Checkout />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ORDERS
+                ========================= */}
+
+                <Route
+                    path="/orders"
+                    element={
+                        <ProtectedRoute>
+                            <Orders />
+                        </ProtectedRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ACCOUNT
+                ========================= */}
+
                 <Route
                     path="/account"
                     element={
@@ -261,17 +272,172 @@ function App() {
                         </ProtectedRoute>
                     }
                 />
+
+
+                {/* =========================
+                    LOCATION
+                ========================= */}
+
+                <Route
+                    path="/location"
+                    element={
+                        <Location />
+                    }
+                />
+
+
+                {/* =========================
+                    CONTACT
+                ========================= */}
+
+                <Route
+                    path="/contact"
+                    element={
+                        <Contact />
+                    }
+                />
+
+
+                {/* =========================
+                    GALLERY
+                ========================= */}
+
+                <Route
+                    path="/gallery"
+                    element={
+                        <Gallery />
+                    }
+                />
+
+
+                {/* =========================
+                    ADMIN ORDERS
+                ========================= */}
+
+                <Route
+                    path="/admin"
+                    element={
+                        <AdminRoute>
+                            <Admin />
+                        </AdminRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ADMIN PRODUCTS
+                ========================= */}
+
+                <Route
+                    path="/admin/products"
+                    element={
+                        <AdminRoute>
+                            <AdminProducts />
+                        </AdminRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ADMIN USERS
+                ========================= */}
+
+                <Route
+                    path="/admin/users"
+                    element={
+                        <AdminRoute>
+                            <AdminUsers />
+                        </AdminRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ADMIN ENQUIRIES
+                ========================= */}
+
+                <Route
+                    path="/admin/enquiries"
+                    element={
+                        <AdminRoute>
+                            <AdminEnquiries />
+                        </AdminRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ADMIN GALLERY
+                ========================= */}
+
+                <Route
+                    path="/admin/gallery"
+                    element={
+                        <AdminRoute>
+                            <AdminGallery />
+                        </AdminRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ADMIN CUSTOMERS
+                ========================= */}
+
+                <Route
+                    path="/admin/customers"
+                    element={
+                        <AdminRoute>
+                            <AdminCustomers />
+                        </AdminRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    CUSTOMER PROFILE
+                ========================= */}
+
+                <Route
+                    path="/admin/customers/:id"
+                    element={
+                        <AdminRoute>
+                            <CustomerProfile />
+                        </AdminRoute>
+                    }
+                />
+
+
+                {/* =========================
+                    ABOUT
+                ========================= */}
+
+                {/*
+                <Route
+                    path="/about"
+                    element={
+                        <About />
+                    }
+                />
+                */}
+
             </Route>
-            
-            
+
+
+            {/* =========================
+                404
+            ========================= */}
+
             <Route
-    path="*"
-    element={
-        <NotFound />
-    }
-/>
+                path="*"
+                element={
+                    <NotFound />
+                }
+            />
+
         </Routes>
     );
 }
+
 
 export default App;
