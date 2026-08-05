@@ -32,37 +32,65 @@ const generateOrderNumber =
             new Date()
                 .getFullYear();
 
-        const start =
-            new Date(
-                `${year}-01-01T00:00:00.000Z`
-            );
+        const prefix =
+            `SD-${year}-`;
 
-        const end =
-            new Date(
-                `${year + 1}-01-01T00:00:00.000Z`
-            );
-
-        const count =
+        const latestOrder =
             await Order
-                .countDocuments({
-                    createdAt: {
-                        $gte:
-                            start,
-
-                        $lt:
-                            end
+                .findOne({
+                    orderNumber: {
+                        $regex:
+                            `^${prefix}`
                     }
-                });
+                })
+                .sort({
+                    orderNumber:
+                        -1
+                })
+                .select(
+                    "orderNumber"
+                )
+                .lean();
+
+        let nextSequence =
+            1;
+
+        if (
+            latestOrder?.orderNumber
+        ) {
+            const parts =
+                latestOrder
+                    .orderNumber
+                    .split("-");
+
+            const lastSequence =
+                Number(
+                    parts[
+                        parts.length -
+                            1
+                    ]
+                );
+
+            if (
+                Number.isFinite(
+                    lastSequence
+                )
+            ) {
+                nextSequence =
+                    lastSequence +
+                    1;
+            }
+        }
 
         const sequence =
             String(
-                count + 1
+                nextSequence
             ).padStart(
                 5,
                 "0"
             );
 
-        return `SD-${year}-${sequence}`;
+        return `${prefix}${sequence}`;
     };
 
 

@@ -1,72 +1,111 @@
-const nodemailer =
-    require("nodemailer");
+const {
+    Resend
+} = require("resend");
 
-const transporter =
-    nodemailer.createTransport({
-        service: "gmail",
 
-        auth: {
-            user:
-                process.env.EMAIL_USER,
+// =========================
+// RESEND CLIENT
+// =========================
 
-            pass:
-                process.env.EMAIL_PASSWORD
-        }
-    });
+const resend =
+    new Resend(
+        process.env.RESEND_API_KEY
+    );
+
 
 // =========================
 // SEND EMAIL
 // =========================
 
-const sendEmail = async ({
-    to,
-    subject,
-    html
-}) => {
-    if (
-        !to ||
-        !process.env.EMAIL_USER ||
-        !process.env.EMAIL_PASSWORD
-    ) {
-        console.log(
-            "Email skipped: configuration or recipient missing."
-        );
+const sendEmail =
+    async ({
+        to,
+        subject,
+        html
+    }) => {
 
-        return;
-    }
+        if (!to) {
+            console.log(
+                "Email skipped: recipient missing."
+            );
 
-    try {
-        await transporter.sendMail({
-            from: {
-                name:
-                    "Shivalik Dragon",
+            return;
+        }
 
-                address:
-                    process.env.EMAIL_USER
-            },
 
-            to,
+        if (
+            !process.env
+                .RESEND_API_KEY
+        ) {
+            console.log(
+                "Email skipped: RESEND_API_KEY missing."
+            );
 
-            subject,
+            return;
+        }
 
-            html
-        });
 
-        console.log(
-            `Email sent to ${to}`
-        );
-    } catch (error) {
-        console.error(
-            "Email sending failed:",
-            error.message
-        );
+        const from =
+            process.env.EMAIL_FROM ||
+            "Shivalik Dragon <onboarding@resend.dev>";
 
-        throw error;
-    }
-};
+
+        try {
+            const {
+                data,
+                error
+            } =
+                await resend
+                    .emails
+                    .send({
+                        from,
+
+                        to: [
+                            to
+                        ],
+
+                        subject,
+
+                        html
+                    });
+
+
+            if (error) {
+                console.error(
+                    "Resend email error:",
+                    error
+                );
+
+                throw new Error(
+                    error.message ||
+                    "Resend email failed."
+                );
+            }
+
+
+            console.log(
+                `Email sent to ${to}`,
+                data?.id ||
+                ""
+            );
+
+
+            return data;
+
+        } catch (error) {
+            console.error(
+                "Email sending failed:",
+                error.message
+            );
+
+            throw error;
+        }
+    };
+
 
 // =========================
 // PASSWORD RESET EMAIL
+// FUTURE USE
 // =========================
 
 const sendPasswordResetEmail =
@@ -74,10 +113,12 @@ const sendPasswordResetEmail =
         to,
         resetUrl
     }) => {
+
         const html = `
             <!DOCTYPE html>
 
             <html>
+
                 <body
                     style="
                         margin:0;
@@ -90,6 +131,7 @@ const sendPasswordResetEmail =
                         color:#17231b;
                     "
                 >
+
                     <div
                         style="
                             max-width:620px;
@@ -106,6 +148,7 @@ const sendPasswordResetEmail =
                                     16px 16px 0 0;
                             "
                         >
+
                             <h1
                                 style="
                                     margin:0;
@@ -115,7 +158,9 @@ const sendPasswordResetEmail =
                             >
                                 Shivalik Dragon
                             </h1>
+
                         </div>
+
 
                         <div
                             style="
@@ -135,26 +180,29 @@ const sendPasswordResetEmail =
                                 Reset your password
                             </h2>
 
+
                             <p>
                                 We received a request
                                 to reset your password.
                             </p>
+
 
                             <p>
                                 Click the button below
                                 to create a new password.
                             </p>
 
+
                             <div
                                 style="
-                                    margin:
-                                        28px 0;
-                                    text-align:
-                                        center;
+                                    margin:28px 0;
+                                    text-align:center;
                                 "
                             >
+
                                 <a
                                     href="${resetUrl}"
+
                                     style="
                                         display:inline-block;
                                         padding:
@@ -166,13 +214,14 @@ const sendPasswordResetEmail =
                                             none;
                                         border-radius:
                                             10px;
-                                        font-weight:
-                                            bold;
+                                        font-weight:bold;
                                     "
                                 >
                                     Reset Password
                                 </a>
+
                             </div>
+
 
                             <p
                                 style="
@@ -183,6 +232,7 @@ const sendPasswordResetEmail =
                                 This link will expire
                                 in 15 minutes.
                             </p>
+
 
                             <p
                                 style="
@@ -197,10 +247,14 @@ const sendPasswordResetEmail =
                             </p>
 
                         </div>
+
                     </div>
+
                 </body>
+
             </html>
         `;
+
 
         await sendEmail({
             to,
@@ -211,6 +265,7 @@ const sendPasswordResetEmail =
             html
         });
     };
+
 
 module.exports = {
     sendEmail,

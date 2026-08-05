@@ -4,6 +4,7 @@ const {
     "./emailService"
 );
 
+
 // =========================
 // FORMAT CURRENCY
 // =========================
@@ -22,6 +23,7 @@ const formatCurrency = (
     );
 };
 
+
 // =========================
 // ORDER ITEMS TEXT
 // =========================
@@ -31,11 +33,12 @@ const getOrderItemsText = (
 ) => {
     return order.items
         .map(
-            (item) =>
+            item =>
                 `${item.productName} - ${item.quantity} ${item.unit}`
         )
         .join(", ");
 };
+
 
 // =========================
 // ORDER ITEMS HTML
@@ -46,31 +49,38 @@ const getOrderItemsHtml = (
 ) => {
     return order.items
         .map(
-            (item) => `
+            item => `
                 <tr>
+
                     <td
                         style="
                             padding:10px;
-                            border-bottom:1px solid #e5e7eb;
+                            border-bottom:
+                                1px solid #e5e7eb;
                         "
                     >
                         ${item.productName}
                     </td>
 
-                    <td
-                        style="
-                            padding:10px;
-                            border-bottom:1px solid #e5e7eb;
-                            text-align:center;
-                        "
-                    >
-                        ${item.quantity} ${item.unit}
-                    </td>
 
                     <td
                         style="
                             padding:10px;
-                            border-bottom:1px solid #e5e7eb;
+                            border-bottom:
+                                1px solid #e5e7eb;
+                            text-align:center;
+                        "
+                    >
+                        ${item.quantity}
+                        ${item.unit}
+                    </td>
+
+
+                    <td
+                        style="
+                            padding:10px;
+                            border-bottom:
+                                1px solid #e5e7eb;
                             text-align:right;
                         "
                     >
@@ -79,10 +89,12 @@ const getOrderItemsHtml = (
                         )}
                     </td>
 
+
                     <td
                         style="
                             padding:10px;
-                            border-bottom:1px solid #e5e7eb;
+                            border-bottom:
+                                1px solid #e5e7eb;
                             text-align:right;
                         "
                     >
@@ -90,14 +102,16 @@ const getOrderItemsHtml = (
                             item.subtotal
                         )}
                     </td>
+
                 </tr>
             `
         )
         .join("");
 };
 
+
 // =========================
-// EMAIL TEMPLATE
+// CUSTOMER EMAIL TEMPLATE
 // =========================
 
 const orderEmailTemplate = ({
@@ -106,10 +120,12 @@ const orderEmailTemplate = ({
     message,
     order
 }) => {
+
     return `
         <!DOCTYPE html>
 
         <html>
+
             <body
                 style="
                     margin:0;
@@ -139,6 +155,7 @@ const orderEmailTemplate = ({
                                 16px 16px 0 0;
                         "
                     >
+
                         <h1
                             style="
                                 margin:0;
@@ -148,7 +165,9 @@ const orderEmailTemplate = ({
                         >
                             Shivalik Dragon
                         </h1>
+
                     </div>
+
 
                     <div
                         style="
@@ -168,13 +187,18 @@ const orderEmailTemplate = ({
                             ${title}
                         </h2>
 
+
                         <p>
-                            Hi ${customerName || "Customer"},
+                            Hi
+                            ${customerName ||
+                            "Customer"},
                         </p>
+
 
                         <p>
                             ${message}
                         </p>
+
 
                         <div
                             style="
@@ -191,7 +215,9 @@ const orderEmailTemplate = ({
 
                             ${order.orderNumber}
 
-                            <br /><br />
+                            <br />
+                            <br />
+
 
                             <strong>
                                 Status:
@@ -199,7 +225,9 @@ const orderEmailTemplate = ({
 
                             ${order.orderStatus}
 
-                            <br /><br />
+                            <br />
+                            <br />
+
 
                             <strong>
                                 Payment:
@@ -207,7 +235,9 @@ const orderEmailTemplate = ({
 
                             ${order.paymentStatus}
 
-                            <br /><br />
+                            <br />
+                            <br />
+
 
                             <strong>
                                 Total:
@@ -219,6 +249,7 @@ const orderEmailTemplate = ({
 
                         </div>
 
+
                         <table
                             style="
                                 width:100%;
@@ -226,12 +257,16 @@ const orderEmailTemplate = ({
                                     collapse;
                             "
                         >
+
                             <thead>
+
                                 <tr
                                     style="
-                                        background:#f8faf9;
+                                        background:
+                                            #f8faf9;
                                     "
                                 >
+
                                     <th
                                         style="
                                             padding:10px;
@@ -241,6 +276,7 @@ const orderEmailTemplate = ({
                                         Product
                                     </th>
 
+
                                     <th
                                         style="
                                             padding:10px;
@@ -248,6 +284,7 @@ const orderEmailTemplate = ({
                                     >
                                         Quantity
                                     </th>
+
 
                                     <th
                                         style="
@@ -258,6 +295,7 @@ const orderEmailTemplate = ({
                                         Price
                                     </th>
 
+
                                     <th
                                         style="
                                             padding:10px;
@@ -266,15 +304,22 @@ const orderEmailTemplate = ({
                                     >
                                         Total
                                     </th>
+
                                 </tr>
+
                             </thead>
 
+
                             <tbody>
+
                                 ${getOrderItemsHtml(
                                     order
                                 )}
+
                             </tbody>
+
                         </table>
+
 
                         <p
                             style="
@@ -283,8 +328,8 @@ const orderEmailTemplate = ({
                                 font-size:13px;
                             "
                         >
-                            Thank you for ordering from
-                            Shivalik Dragon.
+                            Thank you for ordering
+                            from Shivalik Dragon.
                         </p>
 
                     </div>
@@ -292,52 +337,356 @@ const orderEmailTemplate = ({
                 </div>
 
             </body>
+
         </html>
     `;
 };
+
 
 // =========================
 // CUSTOMER EMAIL
 // =========================
 
-const notifyCustomer = async ({
-    customer,
-    order,
-    title,
-    message
-}) => {
-    if (
-        !customer ||
-        !customer.email
-    ) {
-        console.log(
-            "Customer email notification skipped."
-        );
+const notifyCustomer =
+    async ({
+        customer,
+        order,
+        title,
+        message
+    }) => {
 
-        return;
-    }
+        if (
+            !customer ||
+            !customer.email
+        ) {
+            console.log(
+                "Customer email skipped: email missing."
+            );
 
-    await sendEmail({
-        to:
-            customer.email,
+            return;
+        }
 
-        subject:
-            `${title} - ${order.orderNumber}`,
 
-        html:
-            orderEmailTemplate({
-                customerName:
-                    customer.fullName ||
-                    customer.username,
+        await sendEmail({
+            to:
+                customer.email,
 
-                title,
+            subject:
+                `${title} - ${order.orderNumber}`,
 
-                message,
+            html:
+                orderEmailTemplate({
+                    customerName:
+                        customer.fullName ||
+                        customer.username,
 
-                order
-            })
-    });
-};
+                    title,
+
+                    message,
+
+                    order
+                })
+        });
+    };
+
+
+// =========================
+// ADMIN ORDER TEMPLATE
+// =========================
+
+const adminOrderTemplate =
+    ({
+        customer,
+        order
+    }) => {
+
+        return `
+            <!DOCTYPE html>
+
+            <html>
+
+                <body
+                    style="
+                        margin:0;
+                        padding:0;
+                        background:#f4f8f5;
+                        font-family:
+                            Arial,
+                            Helvetica,
+                            sans-serif;
+                        color:#17231b;
+                    "
+                >
+
+                    <div
+                        style="
+                            max-width:650px;
+                            margin:30px auto;
+                            padding:20px;
+                        "
+                    >
+
+                        <div
+                            style="
+                                background:#166534;
+                                padding:24px;
+                                border-radius:
+                                    16px 16px 0 0;
+                            "
+                        >
+
+                            <h1
+                                style="
+                                    margin:0;
+                                    color:white;
+                                    font-size:24px;
+                                "
+                            >
+                                Shivalik Dragon
+                            </h1>
+
+
+                            <p
+                                style="
+                                    margin:
+                                        6px 0 0;
+                                    color:#d1fae5;
+                                "
+                            >
+                                New Order Notification
+                            </p>
+
+                        </div>
+
+
+                        <div
+                            style="
+                                background:white;
+                                padding:28px;
+                                border-radius:
+                                    0 0 16px 16px;
+                            "
+                        >
+
+                            <h2
+                                style="
+                                    margin-top:0;
+                                    color:#166534;
+                                "
+                            >
+                                New Order Received
+                            </h2>
+
+
+                            <div
+                                style="
+                                    padding:18px;
+                                    border-radius:12px;
+                                    background:#f0fdf4;
+                                "
+                            >
+
+                                <p>
+                                    <strong>
+                                        Order:
+                                    </strong>
+
+                                    ${order.orderNumber}
+                                </p>
+
+
+                                <p>
+                                    <strong>
+                                        Customer:
+                                    </strong>
+
+                                    ${
+                                        customer?.fullName ||
+                                        customer?.username ||
+                                        "-"
+                                    }
+                                </p>
+
+
+                                <p>
+                                    <strong>
+                                        Email:
+                                    </strong>
+
+                                    ${
+                                        customer?.email ||
+                                        "-"
+                                    }
+                                </p>
+
+
+                                <p>
+                                    <strong>
+                                        Phone:
+                                    </strong>
+
+                                    ${
+                                        customer?.phone ||
+                                        "-"
+                                    }
+                                </p>
+
+
+                                <p>
+                                    <strong>
+                                        Items:
+                                    </strong>
+
+                                    ${getOrderItemsText(
+                                        order
+                                    )}
+                                </p>
+
+
+                                <p>
+                                    <strong>
+                                        Status:
+                                    </strong>
+
+                                    ${order.orderStatus}
+                                </p>
+
+
+                                <p>
+                                    <strong>
+                                        Payment:
+                                    </strong>
+
+                                    ${order.paymentStatus}
+                                </p>
+
+
+                                <p
+                                    style="
+                                        margin-bottom:0;
+                                    "
+                                >
+                                    <strong>
+                                        Amount:
+                                    </strong>
+
+                                    <span
+                                        style="
+                                            color:#166534;
+                                            font-size:18px;
+                                            font-weight:bold;
+                                        "
+                                    >
+                                        ₹${formatCurrency(
+                                            order.totalAmount
+                                        )}
+                                    </span>
+                                </p>
+
+                            </div>
+
+
+                            <h3
+                                style="
+                                    margin-top:25px;
+                                "
+                            >
+                                Order Items
+                            </h3>
+
+
+                            <table
+                                style="
+                                    width:100%;
+                                    border-collapse:
+                                        collapse;
+                                "
+                            >
+
+                                <thead>
+
+                                    <tr
+                                        style="
+                                            background:
+                                                #f8faf9;
+                                        "
+                                    >
+
+                                        <th
+                                            style="
+                                                padding:10px;
+                                                text-align:left;
+                                            "
+                                        >
+                                            Product
+                                        </th>
+
+
+                                        <th
+                                            style="
+                                                padding:10px;
+                                            "
+                                        >
+                                            Quantity
+                                        </th>
+
+
+                                        <th
+                                            style="
+                                                padding:10px;
+                                                text-align:right;
+                                            "
+                                        >
+                                            Price
+                                        </th>
+
+
+                                        <th
+                                            style="
+                                                padding:10px;
+                                                text-align:right;
+                                            "
+                                        >
+                                            Total
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    ${getOrderItemsHtml(
+                                        order
+                                    )}
+
+                                </tbody>
+
+                            </table>
+
+
+                            <p
+                                style="
+                                    margin-top:25px;
+                                    color:#64748b;
+                                    font-size:13px;
+                                "
+                            >
+                                Open the Admin Dashboard
+                                to manage this order.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </body>
+
+            </html>
+        `;
+    };
+
 
 // =========================
 // ORDER PLACED
@@ -348,136 +697,85 @@ exports.notifyOrderPlaced =
         customer,
         order
     ) => {
-        await notifyCustomer({
-            customer,
 
-            order,
+        // =========================
+        // CUSTOMER EMAIL
+        // =========================
 
-            title:
-                "Order Received",
+        try {
 
-            message:
-                `Your order ${order.orderNumber} has been received successfully.`
-        });
+            await notifyCustomer({
+                customer,
+
+                order,
+
+                title:
+                    "Order Received",
+
+                message:
+                    `Your order ${order.orderNumber} has been received successfully.`
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Customer order email failed:",
+                error.message
+            );
+        }
+
 
         // =========================
         // ADMIN EMAIL
         // =========================
 
-        if (
-            process.env
-                .ADMIN_NOTIFICATION_EMAIL
-        ) {
+        try {
+
+            const adminEmail =
+                process.env
+                    .ADMIN_NOTIFICATION_EMAIL;
+
+
+            if (!adminEmail) {
+
+                console.log(
+                    "Admin order email skipped: ADMIN_NOTIFICATION_EMAIL missing."
+                );
+
+                return;
+            }
+
+
             await sendEmail({
                 to:
-                    process.env
-                        .ADMIN_NOTIFICATION_EMAIL,
+                    adminEmail,
 
                 subject:
-                    `New Order ${order.orderNumber}`,
+                    `New Order ${order.orderNumber} - ₹${formatCurrency(
+                        order.totalAmount
+                    )}`,
 
-                html: `
-                    <div
-                        style="
-                            font-family:
-                                Arial,
-                                Helvetica,
-                                sans-serif;
-                            color:#17231b;
-                            max-width:600px;
-                            margin:auto;
-                        "
-                    >
-                        <h2
-                            style="
-                                color:#166534;
-                            "
-                        >
-                            New Order Received
-                        </h2>
-
-                        <p>
-                            <strong>
-                                Order:
-                            </strong>
-
-                            ${order.orderNumber}
-                        </p>
-
-                        <p>
-                            <strong>
-                                Customer:
-                            </strong>
-
-                            ${
-                                customer.fullName ||
-                                customer.username ||
-                                "-"
-                            }
-                        </p>
-
-                        <p>
-                            <strong>
-                                Email:
-                            </strong>
-
-                            ${
-                                customer.email ||
-                                "-"
-                            }
-                        </p>
-
-                        <p>
-                            <strong>
-                                Phone:
-                            </strong>
-
-                            ${
-                                customer.phone ||
-                                "-"
-                            }
-                        </p>
-
-                        <p>
-                            <strong>
-                                Items:
-                            </strong>
-
-                            ${getOrderItemsText(
-                                order
-                            )}
-                        </p>
-
-                        <p>
-                            <strong>
-                                Amount:
-                            </strong>
-
-                            ₹${formatCurrency(
-                                order.totalAmount
-                            )}
-                        </p>
-
-                        <p>
-                            <strong>
-                                Status:
-                            </strong>
-
-                            ${order.orderStatus}
-                        </p>
-
-                        <p>
-                            <strong>
-                                Payment:
-                            </strong>
-
-                            ${order.paymentStatus}
-                        </p>
-                    </div>
-                `
+                html:
+                    adminOrderTemplate({
+                        customer,
+                        order
+                    })
             });
+
+
+            console.log(
+                `Admin notified for order ${order.orderNumber}`
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Admin order email failed:",
+                error.message
+            );
         }
     };
+
 
 // =========================
 // ORDER STATUS
@@ -488,7 +786,9 @@ exports.notifyOrderStatus =
         customer,
         order
     ) => {
+
         const statusMessages = {
+
             Pending:
                 "Your order has been received and is awaiting confirmation.",
 
@@ -505,23 +805,36 @@ exports.notifyOrderStatus =
                 "Your order has been cancelled."
         };
 
+
         const message =
             statusMessages[
                 order.orderStatus
             ] ||
             `Your order status is now ${order.orderStatus}.`;
 
-        await notifyCustomer({
-            customer,
 
-            order,
+        try {
 
-            title:
-                `Order ${order.orderStatus}`,
+            await notifyCustomer({
+                customer,
 
-            message
-        });
+                order,
+
+                title:
+                    `Order ${order.orderStatus}`,
+
+                message
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Customer status email failed:",
+                error.message
+            );
+        }
     };
+
 
 // =========================
 // PAYMENT STATUS
@@ -532,17 +845,29 @@ exports.notifyPaymentStatus =
         customer,
         order
     ) => {
+
         const message =
             `Payment status for your order ${order.orderNumber} has been updated to ${order.paymentStatus}.`;
 
-        await notifyCustomer({
-            customer,
 
-            order,
+        try {
 
-            title:
-                `Payment ${order.paymentStatus}`,
+            await notifyCustomer({
+                customer,
 
-            message
-        });
+                order,
+
+                title:
+                    `Payment ${order.paymentStatus}`,
+
+                message
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Customer payment email failed:",
+                error.message
+            );
+        }
     };

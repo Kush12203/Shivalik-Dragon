@@ -3,6 +3,12 @@ const ContactMessage =
         "../models/contactMessage"
     );
 
+const {
+    sendEmail
+} = require(
+    "../services/emailService"
+);
+
 
 // =========================
 // VALIDATE EMAIL
@@ -18,6 +24,338 @@ const isValidEmail = (
 
 
 // =========================
+// ESCAPE HTML
+// =========================
+
+const escapeHtml = (
+    value = ""
+) => {
+    return String(
+        value
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+};
+
+
+// =========================
+// ADMIN ENQUIRY EMAIL
+// =========================
+
+const sendAdminEnquiryEmail =
+    async ({
+        fullName,
+        email,
+        phone,
+        reason,
+        message
+    }) => {
+
+        const adminEmail =
+            process.env
+                .ADMIN_NOTIFICATION_EMAIL;
+
+
+        if (!adminEmail) {
+            console.log(
+                "Admin enquiry email skipped: ADMIN_NOTIFICATION_EMAIL missing."
+            );
+
+            return;
+        }
+
+
+        const safeName =
+            escapeHtml(
+                fullName
+            );
+
+        const safeEmail =
+            escapeHtml(
+                email
+            );
+
+        const safePhone =
+            escapeHtml(
+                phone ||
+                    "Not provided"
+            );
+
+        const safeReason =
+            escapeHtml(
+                reason
+            );
+
+        const safeMessage =
+            escapeHtml(
+                message
+            );
+
+
+        const html = `
+            <!DOCTYPE html>
+
+            <html>
+
+                <body
+                    style="
+                        margin:0;
+                        padding:0;
+                        background:#f4f8f5;
+                        font-family:
+                            Arial,
+                            Helvetica,
+                            sans-serif;
+                        color:#17231b;
+                    "
+                >
+
+                    <div
+                        style="
+                            max-width:650px;
+                            margin:30px auto;
+                            padding:20px;
+                        "
+                    >
+
+                        <!-- =========================
+                            HEADER
+                        ========================= -->
+
+                        <div
+                            style="
+                                background:#166534;
+                                padding:24px;
+                                border-radius:
+                                    16px 16px 0 0;
+                            "
+                        >
+
+                            <h1
+                                style="
+                                    margin:0;
+                                    color:white;
+                                    font-size:24px;
+                                "
+                            >
+                                Shivalik Dragon
+                            </h1>
+
+
+                            <p
+                                style="
+                                    margin:
+                                        7px 0 0;
+                                    color:#d1fae5;
+                                    font-size:13px;
+                                "
+                            >
+                                Customer Enquiry
+                            </p>
+
+                        </div>
+
+
+                        <!-- =========================
+                            BODY
+                        ========================= -->
+
+                        <div
+                            style="
+                                background:white;
+                                padding:28px;
+                                border-radius:
+                                    0 0 16px 16px;
+                            "
+                        >
+
+                            <h2
+                                style="
+                                    margin-top:0;
+                                    color:#166534;
+                                "
+                            >
+                                New Contact Enquiry
+                            </h2>
+
+
+                            <p
+                                style="
+                                    line-height:1.6;
+                                "
+                            >
+                                A new enquiry has been
+                                submitted through the
+                                Shivalik Dragon website.
+                            </p>
+
+
+                            <!-- =========================
+                                CUSTOMER DETAILS
+                            ========================= -->
+
+                            <div
+                                style="
+                                    margin:24px 0;
+                                    padding:18px;
+                                    background:#f0fdf4;
+                                    border-radius:12px;
+                                "
+                            >
+
+                                <p
+                                    style="
+                                        margin:
+                                            0 0 12px;
+                                    "
+                                >
+                                    <strong>
+                                        Customer:
+                                    </strong>
+
+                                    ${safeName}
+                                </p>
+
+
+                                <p
+                                    style="
+                                        margin:
+                                            0 0 12px;
+                                    "
+                                >
+                                    <strong>
+                                        Email:
+                                    </strong>
+
+                                    ${safeEmail}
+                                </p>
+
+
+                                <p
+                                    style="
+                                        margin:
+                                            0 0 12px;
+                                    "
+                                >
+                                    <strong>
+                                        Phone:
+                                    </strong>
+
+                                    ${safePhone}
+                                </p>
+
+
+                                <p
+                                    style="
+                                        margin:0;
+                                    "
+                                >
+                                    <strong>
+                                        Reason:
+                                    </strong>
+
+                                    ${safeReason}
+                                </p>
+
+                            </div>
+
+
+                            <!-- =========================
+                                MESSAGE
+                            ========================= -->
+
+                            <div
+                                style="
+                                    margin-top:20px;
+                                "
+                            >
+
+                                <p
+                                    style="
+                                        margin-bottom:8px;
+                                        font-weight:bold;
+                                    "
+                                >
+                                    Message
+                                </p>
+
+
+                                <div
+                                    style="
+                                        padding:18px;
+                                        background:#f8faf9;
+                                        border:
+                                            1px solid #e5e7eb;
+                                        border-radius:12px;
+                                        line-height:1.7;
+                                        white-space:
+                                            pre-wrap;
+                                    "
+                                >
+                                    ${safeMessage}
+                                </div>
+
+                            </div>
+
+
+                            <!-- =========================
+                                FOOTER
+                            ========================= -->
+
+                            <p
+                                style="
+                                    margin-top:26px;
+                                    color:#64748b;
+                                    font-size:13px;
+                                    line-height:1.6;
+                                "
+                            >
+                                Open the Shivalik Dragon
+                                Admin Panel to view and
+                                manage this enquiry.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </body>
+
+            </html>
+        `;
+
+
+        await sendEmail({
+            to:
+                adminEmail,
+
+            subject:
+                `New Enquiry - ${reason}`,
+
+            html
+        });
+    };
+
+
+// =========================
 // CREATE CONTACT MESSAGE
 // PUBLIC
 // =========================
@@ -27,7 +365,9 @@ exports.sendContactMessage =
         req,
         res
     ) => {
+
         try {
+
             const {
                 fullName,
                 email,
@@ -37,12 +377,17 @@ exports.sendContactMessage =
             } = req.body;
 
 
+            // =========================
+            // REQUIRED FIELDS
+            // =========================
+
             if (
                 !fullName ||
                 !email ||
                 !reason ||
                 !message
             ) {
+
                 return res
                     .status(400)
                     .json({
@@ -55,6 +400,10 @@ exports.sendContactMessage =
             }
 
 
+            // =========================
+            // CLEAN INPUT
+            // =========================
+
             const cleanName =
                 String(
                     fullName
@@ -64,6 +413,7 @@ exports.sendContactMessage =
                         0,
                         100
                     );
+
 
             const cleanEmail =
                 String(
@@ -76,15 +426,18 @@ exports.sendContactMessage =
                         150
                     );
 
+
             const cleanPhone =
                 String(
-                    phone || ""
+                    phone ||
+                        ""
                 )
                     .trim()
                     .slice(
                         0,
                         30
                     );
+
 
             const cleanReason =
                 String(
@@ -95,6 +448,7 @@ exports.sendContactMessage =
                         0,
                         120
                     );
+
 
             const cleanMessage =
                 String(
@@ -107,12 +461,17 @@ exports.sendContactMessage =
                     );
 
 
+            // =========================
+            // VALIDATE CLEANED DATA
+            // =========================
+
             if (
                 !cleanName ||
                 !cleanEmail ||
                 !cleanReason ||
                 !cleanMessage
             ) {
+
                 return res
                     .status(400)
                     .json({
@@ -125,11 +484,16 @@ exports.sendContactMessage =
             }
 
 
+            // =========================
+            // EMAIL VALIDATION
+            // =========================
+
             if (
                 !isValidEmail(
                     cleanEmail
                 )
             ) {
+
                 return res
                     .status(400)
                     .json({
@@ -141,6 +505,10 @@ exports.sendContactMessage =
                     });
             }
 
+
+            // =========================
+            // SAVE ENQUIRY
+            // =========================
 
             const contactMessage =
                 await ContactMessage.create(
@@ -163,6 +531,53 @@ exports.sendContactMessage =
                 );
 
 
+            // =========================
+            // ADMIN EMAIL
+            //
+            // DO NOT await this.
+            // Email failure must never
+            // make contact form fail.
+            // =========================
+
+            sendAdminEnquiryEmail({
+                fullName:
+                    cleanName,
+
+                email:
+                    cleanEmail,
+
+                phone:
+                    cleanPhone,
+
+                reason:
+                    cleanReason,
+
+                message:
+                    cleanMessage
+            })
+                .then(() => {
+
+                    console.log(
+                        `Admin notified for enquiry from ${cleanEmail}`
+                    );
+
+                })
+                .catch(
+                    error => {
+
+                        console.error(
+                            "Admin enquiry email failed:",
+                            error.message
+                        );
+
+                    }
+                );
+
+
+            // =========================
+            // RESPONSE
+            // =========================
+
             return res
                 .status(201)
                 .json({
@@ -176,10 +591,12 @@ exports.sendContactMessage =
                 });
 
         } catch (error) {
+
             console.error(
                 "Contact message error:",
                 error
             );
+
 
             return res
                 .status(500)
@@ -204,19 +621,27 @@ exports.getContactMessages =
         req,
         res
     ) => {
+
         try {
+
             const {
                 status,
                 search
             } = req.query;
 
+
             const filter = {};
 
+
+            // =========================
+            // STATUS FILTER
+            // =========================
 
             if (
                 status ===
                 "unread"
             ) {
+
                 filter.isRead =
                     false;
             }
@@ -226,6 +651,7 @@ exports.getContactMessages =
                 status ===
                 "read"
             ) {
+
                 filter.isRead =
                     true;
             }
@@ -235,6 +661,7 @@ exports.getContactMessages =
                 status ===
                 "resolved"
             ) {
+
                 filter.isResolved =
                     true;
             }
@@ -244,15 +671,21 @@ exports.getContactMessages =
                 status ===
                 "pending"
             ) {
+
                 filter.isResolved =
                     false;
             }
 
 
+            // =========================
+            // SEARCH
+            // =========================
+
             if (
                 search &&
                 search.trim()
             ) {
+
                 const escapedSearch =
                     search
                         .trim()
@@ -261,13 +694,16 @@ exports.getContactMessages =
                             "\\$&"
                         );
 
+
                 const regex =
                     new RegExp(
                         escapedSearch,
                         "i"
                     );
 
+
                 filter.$or = [
+
                     {
                         fullName:
                             regex
@@ -292,9 +728,14 @@ exports.getContactMessages =
                         message:
                             regex
                     }
+
                 ];
             }
 
+
+            // =========================
+            // FETCH MESSAGES
+            // =========================
 
             const messages =
                 await ContactMessage
@@ -306,6 +747,10 @@ exports.getContactMessages =
                             -1
                     });
 
+
+            // =========================
+            // COUNTS
+            // =========================
 
             const unreadCount =
                 await ContactMessage
@@ -322,6 +767,10 @@ exports.getContactMessages =
                             false
                     });
 
+
+            // =========================
+            // RESPONSE
+            // =========================
 
             return res
                 .status(200)
@@ -340,10 +789,12 @@ exports.getContactMessages =
                 });
 
         } catch (error) {
+
             console.error(
                 "Get contact messages error:",
                 error
             );
+
 
             return res
                 .status(500)
@@ -368,7 +819,9 @@ exports.getContactMessage =
         req,
         res
     ) => {
+
         try {
+
             const message =
                 await ContactMessage
                     .findById(
@@ -377,6 +830,7 @@ exports.getContactMessage =
 
 
             if (!message) {
+
                 return res
                     .status(404)
                     .json({
@@ -399,15 +853,18 @@ exports.getContactMessage =
                 });
 
         } catch (error) {
+
             console.error(
                 "Get contact message error:",
                 error
             );
 
+
             if (
                 error.name ===
                 "CastError"
             ) {
+
                 return res
                     .status(400)
                     .json({
@@ -443,7 +900,9 @@ exports.updateReadStatus =
         req,
         res
     ) => {
+
         try {
+
             const {
                 isRead
             } = req.body;
@@ -453,6 +912,7 @@ exports.updateReadStatus =
                 typeof isRead !==
                 "boolean"
             ) {
+
                 return res
                     .status(400)
                     .json({
@@ -482,6 +942,7 @@ exports.updateReadStatus =
 
 
             if (!message) {
+
                 return res
                     .status(404)
                     .json({
@@ -508,10 +969,12 @@ exports.updateReadStatus =
                 });
 
         } catch (error) {
+
             console.error(
                 "Update read status error:",
                 error
             );
+
 
             return res
                 .status(500)
@@ -536,7 +999,9 @@ exports.updateResolvedStatus =
         req,
         res
     ) => {
+
         try {
+
             const {
                 isResolved
             } = req.body;
@@ -546,6 +1011,7 @@ exports.updateResolvedStatus =
                 typeof isResolved !==
                 "boolean"
             ) {
+
                 return res
                     .status(400)
                     .json({
@@ -582,6 +1048,7 @@ exports.updateResolvedStatus =
 
 
             if (!message) {
+
                 return res
                     .status(404)
                     .json({
@@ -610,10 +1077,12 @@ exports.updateResolvedStatus =
                 });
 
         } catch (error) {
+
             console.error(
                 "Update resolved status error:",
                 error
             );
+
 
             return res
                 .status(500)
@@ -638,7 +1107,9 @@ exports.deleteContactMessage =
         req,
         res
     ) => {
+
         try {
+
             const message =
                 await ContactMessage
                     .findByIdAndDelete(
@@ -647,6 +1118,7 @@ exports.deleteContactMessage =
 
 
             if (!message) {
+
                 return res
                     .status(404)
                     .json({
@@ -670,10 +1142,12 @@ exports.deleteContactMessage =
                 });
 
         } catch (error) {
+
             console.error(
                 "Delete contact message error:",
                 error
             );
+
 
             return res
                 .status(500)
