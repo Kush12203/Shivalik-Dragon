@@ -686,7 +686,7 @@ export default function Navbar() {
                                                             size={18}
                                                         />
 
-                                                        Admin Panel
+                                                        Manage Orders
                                                     </button>
 
 
@@ -1152,7 +1152,7 @@ export default function Navbar() {
         )
     }
 >
-    Admin Panel
+    Manage Orders
 </NavLink>
 
 
